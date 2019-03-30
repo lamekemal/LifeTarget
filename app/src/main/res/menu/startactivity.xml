@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/message"
+        android:title="Message"
+        android:icon="@drawable/baseline_mail_outline_black_18dp"
+        app:showAsAction="always" />
+    <item android:id="@+id/search_Av"
+        android:title="@string/search_title_adv"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="never" />
+    <item android:id="@+id/qr_search"
+        android:title="@string/qr_code_search"
+        android:icon="@drawable/qr_ico"
+        app:showAsAction="never" />
+
+</menu>

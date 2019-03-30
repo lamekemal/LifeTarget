@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".categoriesView">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_weight="1"
+        app:titleTextColor="@color/white"
+        android:background="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        app:title="@string/app_name"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/indicator_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:layout_gravity="end"
+            android:src="@drawable/abc_ic_search_api_mtrl_alpha" />
+
+    </android.support.v7.widget.Toolbar>
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_zone"
+        app:mt_speechMode="true"
+        app:mt_placeholder="Taper pour rechercher"
+        app:mt_hint="Recheche..."
+        app:mt_searchBarColor="@color/colorPrimary"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recicler_search"
+        android:layout_below="@id/search_zone">
+
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

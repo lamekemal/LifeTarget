@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".TourItmViewer">
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-5dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".TourItmViewer"
+        tools:showIn="@layout/activity_tour_itm_viewer">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image_primp"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pic1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="2dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="450dp"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/galery_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_margin="1dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/pic3"/>
+                    <ImageView
+                        android:id="@+id/galery_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/pic2"
+                        android:scaleType="centerCrop"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="450dp"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:id="@+id/galery_tree"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/pic4"
+                        android:scaleType="centerCrop"/>
+                    <ImageView
+                        android:id="@+id/galery_four"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_margin="1dp"
+                        android:src="@drawable/pic5"
+                        android:scaleType="centerCrop"/>
+                </LinearLayout>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/galery_five"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/facebook_ico_log" />
+            <ImageView
+                android:id="@+id/galery_six"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/picselementtv" />
+            <ImageView
+                android:id="@+id/galery_seven"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/picselementpc" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="87dp"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="Sites Title"/>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/text_localisation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="italic"
+            android:textColor="@color/white"
+            android:text="Sites Title"/>
+
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:background="@color/white"
+        app:backgroundTint="@color/viewBg"
+        app:srcCompat="@drawable/ic_menu_black_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="117dp"
+        android:layout_marginBottom="8dp"
+        app:fabSize="mini"
+        android:background="@color/white"
+        android:animateLayoutChanges="true"
+        app:backgroundTint="@color/viewBg"
+        app:srcCompat="@drawable/hearts"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginRight="67dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/white"
+        app:backgroundTint="@color/viewBg"
+        android:animateLayoutChanges="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/service"
+        android:visibility="gone"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/custumservice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="117dp"
+        android:background="@color/white"
+        app:backgroundTint="@color/viewBg"
+        android:animateLayoutChanges="true"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/customer_service"
+        android:visibility="gone"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginBottom="67dp"
+        android:background="@color/white"
+        android:animateLayoutChanges="true"
+        app:fabSize="mini"
+        app:backgroundTint="@color/viewBg"
+        app:srcCompat="@drawable/instagram"
+        android:visibility="gone"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/faba"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="@android:color/transparent"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/add" />
+</android.support.design.widget.CoordinatorLayout>

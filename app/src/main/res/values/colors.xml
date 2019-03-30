@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#F07F09</color>
+    <color name="colorPrimaryDark">#ce6d09</color>
+    <color name="colorAccent">#e54a1e</color>
+
+    <color name="colorAccenth">#47ffffff</color>
+    <color name="coloriview">#92ffffff</color>
+    <color name="album_title" >#47292929</color>
+    <color name="zone_rech">#75ffffff</color>
+    <color name="Noir" >#000000</color>
+    <color name="Bleu" >#2092AD</color>
+    <color name="Vert" >#499C54</color>
+    <color name="Lavande" >#007ACC</color>
+    <color name="Brun" >#FFA64D</color>
+    <color name="magent" >#FF55FF</color>
+    <color name="viewBg">#FFFFFF</color>
+
+    <color name="bg_login">#CE00ACC1</color>
+    <color name="bg_cyan">#26ae90</color>
+    <color name="bg_register">#F52E3237</color>
+    <color name="bg_main">#428bca</color>
+    <color name="white">#ffffff</color>
+    <color name="input_login">#222222</color>
+    <color name="input_login_hint">#999999</color>
+    <color name="input_register">#888888</color>
+    <color name="input_register_bg">#3b4148</color>
+    <color name="input_register_hint">#5e6266</color>
+    <color name="btn_login">#26ae90</color>
+    <color name="btn_login_bg">#eceef1</color>
+    <color name="lbl_name">#333333</color>
+    <color name="btn_logut_bg">#ff6861</color>
+</resources>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/my_image_bg"
+    tools:context=".loginInterface"
+    android:padding="20dp" >
+
+        <LinearLayout
+            android:id="@+id/login_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Se Connecter ou S'enregistrer"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                android:layout_marginBottom="20dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/login_emailid"
+                android:singleLine="true"
+                android:layout_width="fill_parent"
+                android:layout_height="35dp"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/bein_draw_txt"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:hint="Numero de Telephone"
+                android:inputType="phone"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1px"
+                android:background="@color/white" />
+
+            <EditText
+                android:id="@+id/login_password"
+                android:singleLine="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:drawableLeft="@drawable/baseline_mail_outline_black_18dp"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:hint="Adresse E-mail"
+                android:inputType="textEmailAddress"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="8dp"
+                android:visibility="gone">
+
+                <CheckBox
+                    android:id="@+id/show_hide_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/forgot_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:padding="5dp"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="12dp"
+                android:text="Selectionner une interface de connection"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Google"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+                <Button
+                    android:id="@+id/gloginBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/google_ico_log"
+                    android:textColor="#009688"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/floginBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="45dp"
+                    android:background="@drawable/facebook_ico_log"
+                    android:textColor="#009688"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/lloginBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="45dp"
+                    android:background="@drawable/life_logo"
+                    android:textColor="#009688"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
+            <Button
+                android:visibility="gone"
+                android:id="@+id/loginBtn"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:padding="3dp"
+                android:text="Se connecter"
+                android:textColor="#009688"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+    </RelativeLayout>

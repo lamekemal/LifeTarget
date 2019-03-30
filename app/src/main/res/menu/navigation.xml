@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_galery"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Galerie" />
+    <item
+        android:id="@+id/navigation_description"
+        android:icon="@drawable/baseline_description_black_18dp"
+        android:title="Description" />
+    <item
+        android:id="@+id/navigation_services"
+        android:icon="@drawable/baseline_info_black_18dp"
+        android:title="Informations" />
+    <item
+        android:id="@+id/navigation_pfort"
+        android:icon="@drawable/baseline_thumb_up_alt_black_18dp"
+        android:title="Points Forts" />
+    <item
+        android:id="@+id/navigation_pfailble"
+        android:icon="@drawable/baseline_place_black_18dp"
+        android:title="Localisation" />
+</menu>

@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">LifeTarget</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="tab_text_1">Services</string>
+    <string name="tab_text_2">File d\'Actualité</string>
+    <string name="tab_text_3">Compte</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="SearchText">Recherche</string>
+    <string name="texttoasturl">Téléchargement des données</string>
+    <string name="categoriJson">contacts</string>
+    <string name="title_activity_startactivity">startactivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Utilisateur Anonyme</string>
+    <string name="nav_header_subtitle">Tapez pour vous enregistrer</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="app_label">LifeTarget</string>
+    <string name="search_hint">Recherche Lifetarget</string>
+    <string name="search_title">Recherche</string>
+    <string name="search_title_adv">Recherche Avancer</string>
+    <string name="qr_code_search">Scan QR-Code</string>
+
+    <string name="action_add_favourite">Visiter</string>
+    <string name="action_play_next">Information</string>
+    <string name="backdrop_title">LOVE MUSIC</string>
+    <string name="backdrop_subtitle">This season top 20 albums</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="innov_text_categories">Innovation</string>
+    <string name="transport_text_categories">Transport</string>
+    <string name="livraison_text_categories">Service de livraison</string>
+    <string name="tourit_text_categories">Sites Touristiques</string>
+    <string name="resto_text_categories">Restaurants</string>
+    <string name="hotel_text_categories">Hotel</string>
+    <string name="feed_dwn_error">Echec de telechargement de la fille d\'actualité</string>
+    <string name="title_activity_image_viewer">imageViewer</string>
+    <string name="title_activity_tour">Tour</string>
+    <string name="title_activity_tour_itm_viewer">TourItmViewer</string>
+    <string name="title_activity_innov_viewer">InnovViewer</string>
+    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_activity_splscr">LifeTarget Origon</string>
+    <string name="preference_key">LIFESETINGS_GENERAL</string>
+    <string name="title_activity_message">Message</string>
+    <string name="title_activity_main4cservice">Centre Service</string>
+</resources>

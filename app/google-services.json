@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "514702316354",
+    "firebase_url": "https://lifetarget-10548.firebaseio.com",
+    "project_id": "lifetarget-10548",
+    "storage_bucket": "lifetarget-10548.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514702316354:android:6970a1117508dd5d",
+        "android_client_info": {
+          "package_name": "com.archeosbj.lifetarget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514702316354-cio5q2on12rkk5j4umtphrq84j49mldb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.archeosbj.lifetarget",
+            "certificate_hash": "76387f170bcfab319a696695a7ce82a5d6e4149e"
+          }
+        },
+        {
+          "client_id": "514702316354-t1ocq68i8r6i6t274iiokbujsm9v3r44.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHAP7LRmkq6JGBD_OJn0VEdGC5lFvcq40"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514702316354-t1ocq68i8r6i6t274iiokbujsm9v3r44.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

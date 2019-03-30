@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.archeosbj.lifetarget">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="com.example.permission.MAPS_RECEIVE" />
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Main4cservice"
+            android:label="@string/title_activity_main4cservice"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Main4post" />
+        <activity
+            android:name=".messageAct"
+            android:label="@string/title_activity_message"
+            android:theme="@style/LitleTheme" />
+        <activity
+            android:name=".splscr"
+            android:label="@string/title_activity_splscr"
+            android:theme="@style/IntroFullScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="barcode" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDHAP7LRmkq6JGBD_OJn0VEdGC5lFvcq40" />
+
+        <activity
+            android:name=".httpTool.Main3Activity"
+            android:label="@string/title_activity_main3"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".InnovViewer"
+            android:label="@string/title_activity_innov_viewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TourItmViewer"
+            android:label="@string/title_activity_tour_itm_viewer"
+            android:theme="@style/AppTheme.NoActionBarWhite" />
+        <activity
+            android:name=".barcode.ScanActivity"
+            android:label="@string/title_activity_tour_itm_viewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".sitesTviewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".imageViewer"
+            android:label="@string/title_activity_image_viewer"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".hotelviwer"
+            android:theme="@style/CategoriesFullScreen" />
+        <activity
+            android:name=".loginInterface"
+            android:theme="@style/IntroFullScreen" />
+        <activity
+            android:name=".Appintro"
+            android:label="LifeTarget (Alpha-Test)"
+            android:theme="@style/IntroFullScreen" />
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".loginandregistration.activity.LoginActivity"
+            android:label="Connexion"
+            android:theme="@style/IntroFullScreen"/>
+        <activity
+            android:name=".loginandregistration.activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/IntroFullScreen"/>
+        <activity
+            android:name=".loginandregistration.activity.RegisterActivity"
+            android:label="@string/app_name"
+            android:theme="@style/IntroFullScreen"/>
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SearchTemp.adaptersch" />
+        <activity
+            android:name=".startactivity"
+            android:label="@string/title_activity_startactivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SearchableActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name=".categoriesView"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Innovation"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".TransportActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>
