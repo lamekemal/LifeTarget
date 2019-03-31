@@ -28,7 +28,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.archeosbj.lifetarget.data.databaseContract;
-import com.archeosbj.lifetarget.loginandregistration.activity.LoginActivity;
 import com.archeosbj.lifetarget.loginandregistration.app.AppController;
 import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
 import com.archeosbj.lifetarget.loginandregistration.helper.SessionManager;
@@ -281,7 +280,7 @@ public class hotelviwer extends AppCompatActivity{
                     db = new SQLiteHandler(getApplicationContext());
 
                     HashMap<String, String> user = db.getUserDetails();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
                     String email = user.get("email");
                     String[] HotelItm = new String[28];
@@ -299,7 +298,7 @@ public class hotelviwer extends AppCompatActivity{
                     overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
 
                 }else{
-                    Snackbar.make( getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                    Snackbar.make( v,"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
                             .setAction("Se connecter", null).show();
                 }
             }
@@ -312,7 +311,7 @@ public class hotelviwer extends AppCompatActivity{
                     db = new SQLiteHandler(getApplicationContext());
 
                     HashMap<String, String> user = db.getUserDetails();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
                     String email = user.get("email");
                     String[] HotelItm = new String[28];

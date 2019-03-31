@@ -36,7 +36,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.archeosbj.lifetarget.Adpter.SearchAdapter;
 import com.archeosbj.lifetarget.Adpter.SearchAdapters;
@@ -574,23 +573,46 @@ public class startactivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        final SessionManager session = new SessionManager(getApplicationContext());
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
-            Snackbar.make( getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
-                    .setAction("Se connecter", null).show();
+            if (session.isLoggedIn()) {
+                Intent intent = new Intent(getApplicationContext(), CodePromos.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
+            }else{
+                Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                        .setAction("Se connecter", null).show();
+            }
         } else if (id == R.id.nav_gallery) {
-            Toast.makeText(this,"Good test galery",Toast.LENGTH_LONG).show();
-            Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
-                    .setAction("Se connecter", null).show();
+            if (session.isLoggedIn()) {
+                Intent intent = new Intent(getApplicationContext(), ListeDesFavoris.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
+            }else{
+                Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                        .setAction("Se connecter", null).show();
+            }
         } else if (id == R.id.nav_slideshow) {
-            Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
-                    .setAction("Se connecter", null).show();
+            if (session.isLoggedIn()) {
+                Intent intent = new Intent(getApplicationContext(), messageAct.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
+            }else{
+                Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                        .setAction("Se connecter", null).show();
+            }
         } else if (id == R.id.nav_manage) {
-            loginlogan();
+                loginlogan();
         } else if (id == R.id.nav_share) {
-            Snackbar.make( getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
-                    .setAction("Se connecter", null).show();
+            if (session.isLoggedIn()) {
+                Intent intent = new Intent(getApplicationContext(), CodePartage.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
+            }else{
+                Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                        .setAction("Se connecter", null).show();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

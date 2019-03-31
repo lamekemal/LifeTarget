@@ -47,4 +47,6 @@
     <string name="preference_key">LIFESETINGS_GENERAL</string>
     <string name="title_activity_message">Message</string>
     <string name="title_activity_main4cservice">Centre Service</string>
+    <string name="title_activity_reservation">Reservation</string>
+    <string name="title_activity_code_promos">CodePromos</string>
 </resources>
