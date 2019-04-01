@@ -21,7 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CodeDePartage"></activity>
-        <activity android:name=".CodePartage" />
         <activity
             android:name=".CodePromos"
             android:label="@string/title_activity_code_promos"

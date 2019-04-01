@@ -8,6 +8,6 @@ public class CodeDePartage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_code_de_partage);
+        setContentView(R.layout.activity_main3);
     }
 }

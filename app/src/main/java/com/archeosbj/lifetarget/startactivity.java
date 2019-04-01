@@ -606,7 +606,7 @@ public class startactivity extends AppCompatActivity
                 loginlogan();
         } else if (id == R.id.nav_share) {
             if (session.isLoggedIn()) {
-                Intent intent = new Intent(getApplicationContext(), CodePartage.class);
+                Intent intent = new Intent(getApplicationContext(), CodeDePartage.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
             }else{
