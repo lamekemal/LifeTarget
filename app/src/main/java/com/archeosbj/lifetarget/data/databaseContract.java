@@ -8,20 +8,20 @@ public final class databaseContract {
     private databaseContract() {}
 
     public static class AppConfig {
-        public static final String URL_POST_FAVORITE = "";
+        public static final String URL_POST_FAVORITE = "http://lifetarget.atwebpages.com/interact/api/client/setfav.php";
         // Server user login url
-        public static String URL_LOGIN = "http://192.168.0.102/android_login_api/login.php";
+        public static String URL_LOGIN = "http://lifetarget.atwebpages.com/interact/api/client/login.php";
 
         // Server user register url
-        public static String URL_REGISTER = "http://192.168.0.102/android_login_api/register.php";
+        public static String URL_REGISTER = "http://lifetarget.atwebpages.com/interact/api/client/register.php";
     }
 
     /* Inner class that defines the table contents */
     public static class dataEntry implements BaseColumns {
 
         //feed section
-        public static final String FEED_LINK_URL = "http://192.168.1.114/api/feed/getfeed.php";
-        public static final String SET_FEED_LINK_URL = "http://192.168.1.114/api/feed/getfeed.php";
+        public static final String FEED_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/getfeed.php";
+        public static final String SET_FEED_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/setfeed.php";
 
         //data link
         public static final String HOTEL_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/gethotel.php";
