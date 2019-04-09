@@ -1,44 +1,29 @@
 package com.archeosbj.lifetarget;
 
-import android.app.Activity;
-import android.app.Service;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
-import android.webkit.WebView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.archeosbj.lifetarget.Adpter.SearchAdapter;
 import com.archeosbj.lifetarget.Adpter.feedAdapter;
 import com.archeosbj.lifetarget.Model.Actu;
 import com.archeosbj.lifetarget.data.database;
-import com.archeosbj.lifetarget.data.feedFormJson;
-import com.archeosbj.lifetarget.httpTool.HttpHandler;
 import com.archeosbj.lifetarget.httpTool.JSONParser;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
-import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.BLANK_COOKIES_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FEED_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FEED_LINK_URL;
 
@@ -97,8 +82,8 @@ public class OneFragment extends Fragment {
                 myWebView.destroy();*/
 
                 new GetFeed().execute(FEED_LINK_URL,"cookies");
-                ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
-                myHost.setVisibility(View.VISIBLE);
+                //ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
+                //myHost.setVisibility(View.VISIBLE);
 
             }catch (RuntimeException e){
                 Toast.makeText(getContext(),getString(R.string.feed_dwn_error), Toast.LENGTH_SHORT).show();
@@ -163,8 +148,11 @@ public class OneFragment extends Fragment {
                     m++;
                 }
 
-            } catch (JSONException e) {
+            }catch (JSONException e) {
                 e.printStackTrace();
+            }catch(NullPointerException e)
+            {
+                System.out.print("Caught NullPointerException");
             }
 
             return feedList;
@@ -181,16 +169,16 @@ public class OneFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
+            //ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
             //myHost.setBackgroundColor(Color.MAGENTA);
-            myHost.setVisibility(View.VISIBLE);
+            //myHost.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onProgressUpdate(Void... values) {
-            ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
+            //ProgressBar myHost = (ProgressBar) getActivity().findViewById(R.id.progress_load);
             //myHost.setBackgroundColor(Color.GREEN);
-            myHost.setVisibility(View.VISIBLE);
+            //myHost.setVisibility(View.VISIBLE);
         }
     }
 }

@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".OneFragment">
 
-    <ProgressBar
-        android:id="@+id/progress_load"
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
-        android:indeterminate="true"
-        android:layout_width="match_parent"
-        android:layout_marginTop="-7dp"
-        android:layout_height="15dp" />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

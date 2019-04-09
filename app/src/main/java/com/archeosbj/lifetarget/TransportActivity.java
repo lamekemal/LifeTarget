@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -140,14 +139,14 @@ public class TransportActivity extends AppCompatActivity {
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         FloatingActionButton fabplus = findViewById(R.id.faba);
 
-        fabplus.setOnClickListener(new View.OnClickListener() {
+        /*fabplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(cntx, Reservation.class);
                 intent.putExtra("ITEM",  tranItm);
                 startActivity(intent);
             }
-        });
+        });*/
     }
     void setBitmapImageFormSD(String filepath, ImageView ImgV){
         Glide.with(getApplicationContext())

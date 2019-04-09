@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.archeosbj.lifetarget.Model.Tour;
-import com.archeosbj.lifetarget.Model.resto;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import java.util.List;
 
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_NAME;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_VERSION;
-import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_RESTO;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_SITES;
 
 public class sitesdb extends SQLiteAssetHelper {
@@ -57,7 +55,7 @@ public class sitesdb extends SQLiteAssetHelper {
                 Resto.setPrimpimage(cursor.getString(cursor.getColumnIndex("primpimage")));
                 Resto.setGaleryOne(cursor.getString(cursor.getColumnIndex("galeryOne")));
                 Resto.setGalerytree(cursor.getString(cursor.getColumnIndex("galerytree")));
-                Resto.setGaleryfour(cursor.getString(cursor.getColumnIndex("galeryfor")));
+                Resto.setGaleryfour(cursor.getString(cursor.getColumnIndex("galeryfour")));
                 Resto.setGalerytwo(cursor.getString(cursor.getColumnIndex("galerytwo")));
                 Resto.setGaleryfive(cursor.getString(cursor.getColumnIndex("galeryfive")));
                 Resto.setGalerysix(cursor.getString(cursor.getColumnIndex("galerysix")));

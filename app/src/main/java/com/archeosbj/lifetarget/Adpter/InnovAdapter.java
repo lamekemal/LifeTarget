@@ -25,11 +25,15 @@ class InnovViewHolder extends RecyclerView.ViewHolder {
 
     public InnovViewHolder(View itemView){
         super(itemView);
-        title = (TextView) itemView.findViewById(R.id.title);
+        /*title = (TextView) itemView.findViewById(R.id.title);
         adress = (TextView) itemView.findViewById(R.id.adress);
         description = (TextView) itemView.findViewById(R.id.description);
         rating = (TextView) itemView.findViewById(R.id.rating);
+        thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);*/
+        title = (TextView) itemView.findViewById(R.id.title);
+        rating = (TextView) itemView.findViewById(R.id.count);
         thumbnail = (ImageView) itemView.findViewById(R.id.thumbnail);
+        //overflow = (ImageView) itemView.findViewById(R.id.overflow);
     }
 }
 
@@ -50,15 +54,15 @@ public class InnovAdapter  extends RecyclerView.Adapter<InnovViewHolder> {
     @Override
     public InnovViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.searchitem, parent,false );
+        View itemView = inflater.inflate(R.layout.card_itm, parent,false );
         return new InnovViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(InnovViewHolder holder, final int position) {
         holder.title.setText(Hotel.get(position).getInnovname());
-        holder.adress.setText(Hotel.get(position).getName());
-        holder.description.setText(Hotel.get(position).getDescription());
+        //holder.adress.setText(Hotel.get(position).getName());
+        //holder.description.setText(Hotel.get(position).getDescription());
         //holder.rating.setText(Hotel.get(position).getRating());
 
         Storage storage = new Storage(context);

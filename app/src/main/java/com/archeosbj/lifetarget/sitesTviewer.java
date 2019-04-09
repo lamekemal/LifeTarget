@@ -90,7 +90,6 @@ public class sitesTviewer extends AppCompatActivity {
         if(indexcat ==3){
             //SItes touristk
             sitesdb obase = new sitesdb(this);
-
             TourAdapter xadapter = new TourAdapter(this,obase.getSites(),new TourAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Tour item) {

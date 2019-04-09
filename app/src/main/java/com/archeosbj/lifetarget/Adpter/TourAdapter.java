@@ -14,11 +14,16 @@ import android.widget.TextView;
 
 import com.archeosbj.lifetarget.Model.Tour;
 import com.archeosbj.lifetarget.R;
+import com.snatik.storage.Storage;
 
+import java.io.File;
 import java.util.List;
+
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
+
 public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
     private Context mContext;
-    private List<Tour> albumList;
+    private List<Tour> Hotel;
     private final OnItemClickListener listener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -35,9 +40,9 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
     }
 
 
-    public TourAdapter(Context mContext, List<Tour> albumList, OnItemClickListener listener) {
+    public TourAdapter(Context mContext, List<Tour> Hotel, OnItemClickListener listener) {
         this.mContext = mContext;
-        this.albumList = albumList;
+        this.Hotel = Hotel;
         this.listener = listener;
     }
     public interface OnItemClickListener {
@@ -53,10 +58,17 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Tour album = albumList.get(position);
-        holder.title.setText(album.getName());
-        holder.count.setText(album.getMore());
-        Bitmap bm = decodeSampledBitmapFromResource(album.getPrimpimage(),180,180);
+
+        holder.title.setText(Hotel.get(position).getName());
+        holder.count.setText(Hotel.get(position).getMore());
+
+        Storage storage = new Storage(mContext);
+        String path = storage.getExternalStorageDirectory();
+        String newDir = path + File.separator + DATA_DIRECTORI;
+        String newDiri = newDir + File.separator + "images";
+        String fileph = newDiri + File.separator + Hotel.get(position).getPrimpimage();
+
+        Bitmap bm = decodeSampledBitmapFromResource(fileph,180,180);
         holder.thumbnail.setImageBitmap(bm);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +80,7 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                listener.onItemClick(albumList.get(position));
+                listener.onItemClick(Hotel.get(position));
             }
         });
     }
@@ -137,6 +149,6 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
 
     @Override
     public int getItemCount() {
-        return albumList.size();
+        return Hotel.size();
     }
 }

@@ -273,7 +273,7 @@ public class categoriesView extends AppCompatActivity {
                     @Override
                     public void onItemClick(Serli item) {
                         //on item click
-                        Intent intent = new Intent(getBaseContext(), hotelviwer.class);
+                        Intent intent = new Intent(getBaseContext(), serliview.class);
                         String[] HotelItm = new String[28];
                         HotelItm[0] = "";
                         HotelItm[1] = String.valueOf(item.getId()) ;

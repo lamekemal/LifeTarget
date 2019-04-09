@@ -1101,7 +1101,7 @@ public class ZeroFragment extends Fragment{
 		values.put(databaseContract.dataEntry.COLUMN_NAME_uniqueid,uniqueid);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_service,service);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_pointfort,pointfort);
-		values.put(databaseContract.dataEntry.COLUMN_NAME_price,payement);
+		values.put(databaseContract.dataEntry.COLUMN_NAME_payement,payement);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_primpimage,primpimage);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_galeryOne,galeryOne);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_galerytwo,galerytwo);
@@ -1111,13 +1111,13 @@ public class ZeroFragment extends Fragment{
 		values.put(databaseContract.dataEntry.COLUMN_NAME_galerysix,galerysix);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_zonelivre,zonelivre);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_maxlivre,maxlivre);
-		values.put(databaseContract.dataEntry.COLUMN_NAME_localisation,siteweb);
-		values.put(databaseContract.dataEntry.COLUMN_NAME_more,price);
+		values.put(databaseContract.dataEntry.COLUMN_NAME_siteweb,siteweb);
+		values.put(databaseContract.dataEntry.COLUMN_NAME_price,price);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_reserveone,reserveone);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_reservetwo,reservetwo);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_extras,extras);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
-		values.put(databaseContract.dataEntry.COLUMN_NAME_plusStr,description);
+		values.put(databaseContract.dataEntry.COLUMN_NAME_hDESC,description);
                 long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_SERLI, null, values);
                 if(kid == -1){
                     long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_SERLI, null, values,SQLiteDatabase.CONFLICT_REPLACE);
@@ -1159,7 +1159,7 @@ public class ZeroFragment extends Fragment{
 		values.put(databaseContract.dataEntry.COLUMN_NAME_maxcap,maxcap);
         values.put(databaseContract.dataEntry.COLUMN_NAME_payement,payement);
 		values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
-		values.put(databaseContract.dataEntry.COLUMN_NAME_plusStr,extras);
+		values.put(databaseContract.dataEntry.COLUMN_NAME_extras,extras);
                 long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_TRANS, null, values);
                 if(kid == -1){
                     long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_TRANS, null, values,SQLiteDatabase.CONFLICT_REPLACE);

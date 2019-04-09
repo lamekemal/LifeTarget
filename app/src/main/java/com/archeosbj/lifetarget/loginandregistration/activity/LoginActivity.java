@@ -190,6 +190,7 @@ public class LoginActivity extends Activity {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+
     }
 
     private void showDialog() {

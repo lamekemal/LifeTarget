@@ -161,6 +161,10 @@ public class TourItmViewer extends AppCompatActivity {
         TextView ctrPointfort = (TextView) findViewById(R.id.service_text);
         //TextView ctrExtras = (TextView) findViewById(R.id.service_text);
 
+        ctrLocalisation.setText(Localisation);
+        ctrTitle.setText(Name);
+        //ctrPointfort.setText(Pointfort);
+
         final ImageView ctrPrinpimage = (ImageView) findViewById(R.id.image_primp);
         final ImageView ctrGaleryOne = (ImageView) findViewById(R.id.galery_one);
         final ImageView ctrGalerytwo = (ImageView) findViewById(R.id.galery_two);
