@@ -153,7 +153,7 @@ public class startactivity extends AppCompatActivity
             HashMap<String, String> user = db.getUserDetails();
 
             String name = user.get("name");
-            String email = user.get("email");
+            String email = user.get("settings");
             nav_textView.setText(name);
             nav_textView2.setText(email);
         }else{
@@ -458,6 +458,8 @@ public class startactivity extends AppCompatActivity
     void createTableFPB(){
         SQLiteDatabase myDB = this.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_LIFE);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_FAV);
+        myDB.execSQL(databaseContract.dataEntry.CREATE_LOGIN_TABLE);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_TRANS);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_INNOV);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_SERLI);

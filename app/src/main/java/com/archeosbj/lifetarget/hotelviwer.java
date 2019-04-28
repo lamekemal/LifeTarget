@@ -56,6 +56,7 @@ public class hotelviwer extends AppCompatActivity{
     RelativeLayout pfaibleview;
 
     String Id;
+    String genre;
     String Title;
     String Adress;
     String Payement;
@@ -109,6 +110,7 @@ public class hotelviwer extends AppCompatActivity{
         Intent intent = getIntent();
         String[] RestoItm = intent.getStringArrayExtra("ITEM");
 
+        genre = RestoItm[0];
         Id = RestoItm[1];
         Title = RestoItm[2];
         Adress = RestoItm[3];
@@ -282,7 +284,7 @@ public class hotelviwer extends AppCompatActivity{
                     HashMap<String, String> user = db.getUserDetails();
                     Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String[] HotelItm = new String[28];
                     HotelItm[0] = "";
                     HotelItm[1] = name;
@@ -313,7 +315,7 @@ public class hotelviwer extends AppCompatActivity{
                     HashMap<String, String> user = db.getUserDetails();
                     Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String[] HotelItm = new String[28];
                     HotelItm[0] = "";
                     HotelItm[1] = name;
@@ -343,7 +345,7 @@ public class hotelviwer extends AppCompatActivity{
 
                     HashMap<String, String> user = db.getUserDetails();
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String title =  Title;
                     String uniqi =  Uniqueid;
                     String userURL = "";
@@ -377,8 +379,8 @@ public class hotelviwer extends AppCompatActivity{
 
                     HashMap<String, String> user = db.getUserDetails();
                     String name = user.get("name");
-                    String email = user.get("email");
-                    markpostfav(Uniqueid,email,"true", Title);
+                    String email = user.get("settings");
+                    markpostfav(Uniqueid,email,"true", genre);
                 }else{
                     Snackbar.make( v,"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
                             .setAction("Se connecter", null).show();

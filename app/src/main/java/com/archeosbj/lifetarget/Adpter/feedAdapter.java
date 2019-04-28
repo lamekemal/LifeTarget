@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SERVER_IMGURL_FEED;
+
 class feedViewHolder extends RecyclerView.ViewHolder {
     public TextView title, username, pubdate, description;
     public ImageView userimg, pubimg;
@@ -51,8 +53,13 @@ public class feedAdapter extends RecyclerView.Adapter<feedViewHolder>  {
         holder.username.setText(life.get(position).getUsername());
         holder.description.setText(life.get(position).getDescription());
         holder.pubdate.setText(life.get(position).getPubdate());
-        Glide.with(context).load(life.get(position).getUserimg()).into( holder.userimg);
-        Glide.with(context).load(life.get(position).getPubimg()).into( holder.pubimg);
+        //Log.e("KEMAL","LINK GENERAL " + SERVER_IMGURL_FEED + life.get(position).getUserimg());
+
+        Glide.with(context).load(SERVER_IMGURL_FEED + life.get(position).getUserimg())
+                .into( holder.userimg);
+
+        Glide.with(context).load(SERVER_IMGURL_FEED + life.get(position).getPubimg())
+                .into( holder.pubimg);
     }
 
     @Override

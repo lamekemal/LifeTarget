@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.archeosbj.lifetarget.Model.Innov;
-import com.archeosbj.lifetarget.Model.Trans;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -85,7 +84,7 @@ public class innovdb  extends SQLiteAssetHelper {
         return result;
     }
 
-    public List<Innov> getTransByNames(String title){
+    public List<Innov> getInnovByNames(String title){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String[] sqlSelect={"id","uniqueid", "name", "contact", "service", "description",

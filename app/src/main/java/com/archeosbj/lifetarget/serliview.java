@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -77,6 +78,25 @@ public class serliview extends AppCompatActivity {
         applyIntentItemArry();
     }
 
+    void applyimageck(ImageView img, final String first){
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), imageViewer.class);
+                String[] RestoItm = new String[7];
+                RestoItm[0] = first;
+                RestoItm[1] = Primpimage;
+                RestoItm[2] = Galerysix ;
+                RestoItm[3] = Galerytwo ;
+                RestoItm[4] = Galeryfour ;
+                RestoItm[5] = Galeryfive;
+                RestoItm[6] = GaleryOne;
+                intent.putExtra("ITEM",RestoItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+    }
     private void applyIntentItemArry() {
         final ImageView ctr_primpimage = (ImageView) findViewById(R.id.primpimage);
         final ImageView ctr_galeryOne = (ImageView) findViewById(R.id.galeryOne);
@@ -86,6 +106,12 @@ public class serliview extends AppCompatActivity {
         final ImageView ctr_galeryfive = (ImageView) findViewById(R.id.galeryfive);
         final ImageView ctr_galerysix = (ImageView) findViewById(R.id.galerysix);
 
+        applyimageck(ctr_galeryOne,GaleryOne);
+        applyimageck(ctr_galerytwo,Galerytwo);
+        applyimageck(ctr_galerytree,Galerytree);
+        applyimageck(ctr_galeryfour,Galeryfour);
+        applyimageck(ctr_galeryfive,Galeryfive);
+        applyimageck(ctr_galerysix,Galerysix);
         TextView ctrTitle = (TextView) findViewById(R.id.titleName);
         TextView ctrTitleName = (TextView) findViewById(R.id.title_text);
 

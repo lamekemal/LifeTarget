@@ -54,7 +54,7 @@ public class InnovAdapter  extends RecyclerView.Adapter<InnovViewHolder> {
     @Override
     public InnovViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.card_itm, parent,false );
+        View itemView = inflater.inflate(R.layout.card_itm_i, parent,false );
         return new InnovViewHolder(itemView);
     }
 
@@ -75,6 +75,12 @@ public class InnovAdapter  extends RecyclerView.Adapter<InnovViewHolder> {
         holder.thumbnail.setImageBitmap(bm);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                listener.onItemClick(Hotel.get(position));
+            }
+        });
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(Hotel.get(position));
             }

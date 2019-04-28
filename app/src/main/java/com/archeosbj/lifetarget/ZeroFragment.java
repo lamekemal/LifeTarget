@@ -20,8 +20,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.archeosbj.lifetarget.Model.fav;
+import com.archeosbj.lifetarget.Model.profm;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.archeosbj.lifetarget.data.databaseContract;
+import com.archeosbj.lifetarget.data.favdb;
+import com.archeosbj.lifetarget.data.profdb;
 import com.archeosbj.lifetarget.httpTool.JSONParser;
+import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
+import com.archeosbj.lifetarget.loginandregistration.helper.SessionManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.Request;
 import com.bumptech.glide.request.target.SizeReadyCallback;
@@ -50,6 +57,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import im.delight.android.webview.AdvancedWebView;
 
@@ -60,15 +69,21 @@ import static com.archeosbj.lifetarget.categoriesView.CATEGORIES_INT;
 import static com.archeosbj.lifetarget.categoriesView.CATEGORIES_SENDER;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_NAME;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FAV_JSON_CATEGORIES;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FAV_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.HOTEL_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.HOTEL_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.INNOV_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.INNOV_LINK_URL;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.PROFILS_JSON_CATEGORIES;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.PROFILS_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.RESTO_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.RESTO_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SERLI_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SERLI_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SERVER_IMGURL_API;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SERVER_IMGURL_PROFILS;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SITES_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.SITES_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TRANS_JSON_CATEGORIES;
@@ -194,7 +209,7 @@ public class ZeroFragment extends Fragment{
 
         Log.e(TAG, "strting load");
         new StartdbLoadFromNet().execute(RESTO_LINK_URL,HOTEL_LINK_URL,SITES_LINK_URL,
-                SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"");
+                SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"",FAV_LINK_URL,PROFILS_LINK_URL);
 
         //region DRAFT
         /*CookieSyncManager.createInstance(getActivity());
@@ -251,9 +266,15 @@ public class ZeroFragment extends Fragment{
             JSONObject json = jParser.getJSONFromUrl(urldisplay);
             try {
                 JSONArray feeds  = json.getJSONArray(HOTEL_JSON_CATEGORIES);
-                Log.e(TAG, "Response from url: " + feeds.length());
+                Log.e(TAG, "GetHotel Response from url (nbr): " + feeds.length());
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_HOTEL);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -279,11 +300,14 @@ public class ZeroFragment extends Fragment{
                     String Galeryfive = c.optString("galeryfive");
                     String Galerysix = c.optString("galerysix");
                     String Prinpimage = c.optString("prinpimage");
-
+                    Integer iaRating = RatingNumber(Uniqueid);
+                    String isSrat = String.valueOf(iaRating);
                     createAddDatadbHOTEL( Title,  Id, Adress, Payement, Siteweb, Longdescription, Uniqueid,
                             Service, Pointfort, Pointfaible, Prinpimage, GaleryOne, Galerytwo,
-                            Galeryfor, Galeryfive, Galerysix, Mets, Modified,  Description, Rating);
-
+                            Galeryfor, Galeryfive, Galerysix, Mets, Modified,  Description, isSrat);
+                   if(CheckFavoriteInstant(Uniqueid)) {
+                       AddFavoriteInstant( Title,  Adress, isSrat, Description, Prinpimage, Uniqueid);
+                   }
                     mophs.add(totalcc,Prinpimage);
                     totalcc++;
 
@@ -320,6 +344,8 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String>  result) {
             if(result.size() > 1){
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL,result);
                 new AsyncSaveImageAuto().execute(result);
             }
             Log.e("KEMAL","ENFANT HOTEL JAI FINIS ");
@@ -388,6 +414,12 @@ public class ZeroFragment extends Fragment{
 
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_RESTO);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -413,11 +445,14 @@ public class ZeroFragment extends Fragment{
                     String Galeryfor = c.optString("galeryfor");
                     String Galeryfive = c.optString("galeryfive");
                     String Galerysix = c.optString("galerysix");
-
+                    Integer iaRating = RatingNumber(Uniqueid);
+                    String isSrat = String.valueOf(iaRating);
                     createAddDatadbRESTO( Title,  Id, Adress, Payement, Siteweb, Longdescription, Uniqueid,
                             Service, Pointfort, Pointfaible, Prinpimage, GaleryOne, Galerytwo,
-                            Galeryfor, Galeryfive, Galerysix, Mets, Modified,  Description, Rating);
-
+                            Galeryfor, Galeryfive, Galerysix, Mets, Modified,  Description, isSrat);
+                    if(CheckFavoriteInstant(Uniqueid)) {
+                        AddFavoriteInstant( Title,  Adress, isSrat, Description, Prinpimage, Uniqueid);
+                    }
                     mophs.add(totalcc,GaleryOne);
                     totalcc++;
 
@@ -453,7 +488,9 @@ public class ZeroFragment extends Fragment{
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
                 //AsyncSaveImageAutoFrnt(result);
-                Log.e("KEMAL","ENFANT RESTO PASSS DOWNLOAD ");
+                //Log.e("KEMAL","ENFANT RESTO PASSS DOWNLOAD ");
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO,result);
                 new AsyncSaveImageAuto().execute(result);
                // new AsyncSaveImageAuto().execute(result);
             }
@@ -486,6 +523,12 @@ public class ZeroFragment extends Fragment{
 
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_SITES);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -515,13 +558,17 @@ public class ZeroFragment extends Fragment{
                     String reservetwo = c.optString("reservetwo");
                     String plusStr = c.optString("plusStr");
                     String Modified = c.optString("modified");
-
+                    Integer iaRating = RatingNumber(uniqueid);
+                    String isSrat = String.valueOf(iaRating);
                     createAddDatadbSITES(uniqueid, Id, name, contact, service, mail,
                             horaire, price, pointfort, extras, localisation,
                             more,primpimage, galeryOne, galerytwo, galerytree, galeryfour,
-                            galeryfive, galerysix, galeryseven, reserveone,
+                            galeryfive, galerysix, galeryseven, isSrat,
                             reservetwo, plusStr, Modified);
 
+                    if(CheckFavoriteInstant(uniqueid)) {
+                        AddFavoriteInstant( name,  localisation, isSrat, "Sites Touristiques", primpimage, uniqueid);
+                    }
                     mophs.add(totalcc,primpimage);
                     totalcc++;
 
@@ -562,6 +609,8 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES,result);
                 new AsyncSaveImageAuto().execute(result);
             }
             Log.e("KEMAL","ENFANT SITES JAI FINIS ");
@@ -595,6 +644,12 @@ public class ZeroFragment extends Fragment{
 
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_SERLI);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -623,12 +678,18 @@ public class ZeroFragment extends Fragment{
                     String zonelivre = c.optString("zonelivre");
                     String maxlivre = c.optString("maxlivre");
                     String Modified = c.optString("modified");
+
+                    Integer iaRating = RatingNumber(uniqueid);
+                    String isSrat = String.valueOf(iaRating);
+
                     createAddDatadbSERLI( uniqueid,  Id,  name,  contact,  service,  description,
                             horaire,  price,  pointfort,  extras,  siteweb,
                             payement,  primpimage,  galeryOne,  galerytwo,  galerytree,
                             galeryfour,  galeryfive,  galerysix,  zonelivre,
-                            reserveone,  reservetwo,  maxlivre,  Modified);
-
+                            isSrat,  reservetwo,  maxlivre,  Modified);
+                    if(CheckFavoriteInstant(uniqueid)) {
+                        AddFavoriteInstant( name,  contact, isSrat, zonelivre, primpimage, uniqueid);
+                    }
                     mophs.add(totalcc,primpimage);
                     totalcc++;
 
@@ -666,6 +727,8 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI,result);
                 new AsyncSaveImageAuto().execute(result);
             }
             Log.e("KEMAL","ENFANT SERLI JAI FINIS ");
@@ -700,6 +763,12 @@ public class ZeroFragment extends Fragment{
 
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_TRANS);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -727,11 +796,17 @@ public class ZeroFragment extends Fragment{
                     String transline = c.optString("transline");
                     String Modified = c.optString("modified");
                     String maxcap = c.optString("maxcap");
+
+                    Integer iaRating = RatingNumber(uniqueid);
+                    String isSrat = String.valueOf(iaRating);
+
                     createAddDatadbTRANS( uniqueid,  name,  contact,  service,  description,
                             horaire,  price,  pointfort,  extras,  mail,payement,  primpimage,
-                            galeryOne,  galerytwo,  galerytree,loanbus,  transline,  reserveone,
+                            galeryOne,  galerytwo,  galerytree,loanbus,  transline,  isSrat,
                             reservetwo,  maxcap,  Modified,  Id);
-
+                    if(CheckFavoriteInstant(uniqueid)) {
+                        AddFavoriteInstant( name,  contact, isSrat, description, primpimage, uniqueid);
+                    }
                     //Log.e(TAG, "Response from url: " + feedList.size());
                     mophs.add(totalcc,primpimage);
                     totalcc++;
@@ -760,6 +835,8 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS,result);
                 new AsyncSaveImageAuto().execute(result);
             }
             Log.e("KEMAL","ENFANT TRANS JAI FINIS ");
@@ -794,6 +871,12 @@ public class ZeroFragment extends Fragment{
 
                 int totalcc = 0;
                 int m = 0;
+
+                if(feeds.length()>2){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_INNOV);
+                }
+
                 while (m < feeds.length()) {
 
                     JSONObject c = feeds.getJSONObject(m);
@@ -824,7 +907,9 @@ public class ZeroFragment extends Fragment{
                             innovname,  video,  bibliot,  stectn,  historq,  mail,
                             primpimage,  galeryOne,  galerytwo,  galerytree,  galeryfour,
                             galeryfive,  galerysix,  reservetwo, Modified,  Id);
-
+                    if(CheckFavoriteInstant(uniqueid)) {
+                        AddFavoriteInstant( name,  contact, "", innovname, primpimage, uniqueid);
+                    }
                     //Log.e(TAG, "Response from url: " + feedList.size());
                     mophs.add(totalcc,primpimage);
                     totalcc++;
@@ -863,6 +948,8 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
+                TinyDB tinydb = new TinyDB(getContext());
+                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV,result);
                 new AsyncSaveImageAuto().execute(result);
             }
             Log.e("KEMAL","ENFANT INNOV JAI FINIS ");
@@ -871,6 +958,178 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPreExecute() {
             Log.e("KEMAL","ENFANT INNOV JAI COMMENCER ");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+    }
+
+    private class GetFAV extends AsyncTask<String, Void, ArrayList<String>> {
+
+        @Override
+        protected ArrayList<String> doInBackground(String... params) {
+            String urldisplay = params[0];
+            ArrayList<String> mophs = new ArrayList<String>();
+            JSONParser jParser = new JSONParser();
+            String cookies = params[1];
+            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            Log.e("KEMAL","ENFANT AVEC  " + json.toString());
+            try {
+                JSONArray feeds  = json.getJSONArray(FAV_JSON_CATEGORIES);
+                Log.e("KEMAL","ROW  " + feeds.length());
+                int m = 0;
+
+                while (m < feeds.length()) {
+                    JSONObject c = feeds.getJSONObject(m);
+                    // Storing each json item in variable
+                    String Id = c.optString("id");
+                    String fvuniqid = c.optString("fvuniqid");
+                    String byemail = c.optString("byemail");
+                    String boolvar = c.optString("boolvar");
+                    String genre = c.optString("genre");
+                    String created_at = c.optString("created_at");
+                    createAddDatadbFAV(fvuniqid, byemail,boolvar,genre,created_at,  Id);
+                    m++;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }catch(NullPointerException e)
+            {
+            }
+            return mophs;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> result) {
+            Log.e("KEMAL","ENFANT FAV JAI FINIS ");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.e("KEMAL","ENFANT FAV JAI COMMENCER ");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+    }
+
+    private class GetPROFS extends AsyncTask<String, Void, ArrayList<String>> {
+
+        @Override
+        protected ArrayList<String> doInBackground(String... params) {
+            String urldisplay = params[0];
+            ArrayList<String> mophs = new ArrayList<String>();
+            JSONParser jParser = new JSONParser();
+            String cookies = params[1];
+            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            Log.e("KEMAL","ENFANT PROFILS IMG  " + json.toString());
+            try {
+                JSONArray feeds  = json.getJSONArray(PROFILS_JSON_CATEGORIES);
+                Log.e("KEMAL","ROW PROFILS " + feeds.length());
+                int m = 0;
+
+                while (m < feeds.length()) {
+                    JSONObject c = feeds.getJSONObject(m);
+                    // Storing each json item in variable
+                    String Id = c.optString("id");
+                    String foremail = c.optString("foremail");
+                    String imgvar = c.optString("imgvar");
+                    createAddDatadbPROFS(foremail, imgvar,Id);
+                    m++;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }catch(NullPointerException e)
+            {
+            }
+            return mophs;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> result) {
+            Log.e("KEMAL","ENFANT PROFILS JAI FINIS ");
+            profdb myprofils = new profdb(getContext());
+            SessionManager session = new SessionManager(getContext());
+            if (session.isLoggedIn()) {
+                Log.e("KEMAL","PREPARE DATABASE FOR PROFILS SAVE ");
+                SQLiteHandler db;
+                db = new SQLiteHandler(getContext());
+                HashMap<String, String> user = db.getUserDetails();
+
+                String name = user.get("name");
+                String email = user.get("settings");
+                List<profm> melist = myprofils.getProfByMail(email);
+                if(melist.size() >0){
+                  profm myUprofils = melist.get(0);
+                  String imgn = myUprofils.getImgvar();
+                  TinyDB tiny = new TinyDB(getContext());
+                  tiny.putString(DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM,imgn);
+                    final String filename = imgn;
+                    Storage storage = new Storage(getContext());
+                    String path = storage.getExternalStorageDirectory();
+                    String newDir = path + File.separator + DATA_DIRECTORI;
+                    String newDiri = newDir + File.separator + "images";
+                    storage.createDirectory(newDir);
+                    storage.createDirectory(newDiri);
+                    String fileph = newDiri + File.separator + filename;
+                    if(storage.isFileExist(fileph)){
+                        Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  imgn);
+                    }else {
+                        Glide.with(getActivity().getApplicationContext())
+                                .asBitmap()
+                                .load(SERVER_IMGURL_PROFILS +imgn)
+                                .into(new Target<Bitmap>() {
+                                    @Override
+                                    public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
+                                    @Override
+                                    public void onStop() {}
+                                    @Override
+                                    public void onDestroy() {}
+                                    @Override
+                                    public void onLoadStarted(@Nullable Drawable placeholder) {}
+                                    @Override
+                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                        Log.d("GlideMar", "marker onLoadFailed");
+                                    }
+
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                        Storage storage = new Storage(getContext());
+                                        String path = storage.getExternalStorageDirectory();
+                                        String newDir = path + File.separator + DATA_DIRECTORI;
+                                        String newDiri = newDir + File.separator + "images";
+                                        storage.createDirectory(newDir);
+                                        storage.createDirectory(newDiri);
+                                        String fileph = newDiri + File.separator + filename;
+                                        try {
+                                            storage.createFile(fileph, resource);
+                                        }catch (Exception e){}
+
+                                    }
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {}
+                                    @Override
+                                    public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
+                                    @Override
+                                    public void removeCallback(@NonNull SizeReadyCallback cb) {}
+                                    @Override
+                                    public void setRequest(@Nullable Request request) { }
+                                    @Nullable
+                                    @Override
+                                    public Request getRequest() {return null; }
+                                });
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.e("KEMAL","ENFANT PROFILS JAI COMMENCER ");
         }
 
         @Override
@@ -900,53 +1159,62 @@ public class ZeroFragment extends Fragment{
             for(int i = 0; i < params[0].size(); i++)
             {
                 final String filename = params[0].get(i);
-                Log.e("DOWNLOAD TASK",SERVER_IMGURL_API + params[0].get(i) + " T" +  params[0].get(i));
-                Glide.with(getActivity().getApplicationContext())
-                        .asBitmap()
-                        .load(SERVER_IMGURL_API + params[0].get(i))
-                        .into(new Target<Bitmap>() {
-                            @Override
-                            public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
-                            @Override
-                            public void onStop() {}
-                            @Override
-                            public void onDestroy() {}
-                            @Override
-                            public void onLoadStarted(@Nullable Drawable placeholder) {}
-                            @Override
-                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                Log.d("GlideMar", "marker onLoadFailed");
-                            }
+                Storage storage = new Storage(getContext());
+                String path = storage.getExternalStorageDirectory();
+                String newDir = path + File.separator + DATA_DIRECTORI;
+                String newDiri = newDir + File.separator + "images";
+                storage.createDirectory(newDir);
+                storage.createDirectory(newDiri);
+                String fileph = newDiri + File.separator + filename;
+                if(storage.isFileExist(fileph)){
+                    Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  params[0].get(i));
+                }else {
+                    Log.e("DOWNLOAD TASK",SERVER_IMGURL_API + params[0].get(i) + " T" +  params[0].get(i));
+                    Glide.with(getActivity().getApplicationContext())
+                            .asBitmap()
+                            .load(SERVER_IMGURL_API + params[0].get(i))
+                            .into(new Target<Bitmap>() {
+                                @Override
+                                public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
+                                @Override
+                                public void onStop() {}
+                                @Override
+                                public void onDestroy() {}
+                                @Override
+                                public void onLoadStarted(@Nullable Drawable placeholder) {}
+                                @Override
+                                public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                    Log.d("GlideMar", "marker onLoadFailed");
+                                }
 
-                            @Override
-                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                        Storage storage = new Storage(getContext());
-                                        String path = storage.getExternalStorageDirectory();
-                                        String newDir = path + File.separator + DATA_DIRECTORI;
-                                        String newDiri = newDir + File.separator + "images";
-                                        storage.createDirectory(newDir);
-                                        storage.createDirectory(newDiri);
-                                        String fileph = newDiri + File.separator + filename;
-                                        try {
-                                            storage.createFile(fileph, resource);
-                                        }catch (Exception e){}
+                                @Override
+                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                    Storage storage = new Storage(getContext());
+                                    String path = storage.getExternalStorageDirectory();
+                                    String newDir = path + File.separator + DATA_DIRECTORI;
+                                    String newDiri = newDir + File.separator + "images";
+                                    storage.createDirectory(newDir);
+                                    storage.createDirectory(newDiri);
+                                    String fileph = newDiri + File.separator + filename;
+                                    try {
+                                        storage.createFile(fileph, resource);
+                                    }catch (Exception e){}
 
-                            }
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {}
-                            @Override
-                            public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
-                            @Override
-                            public void removeCallback(@NonNull SizeReadyCallback cb) {}
-                            @Override
-                            public void setRequest(@Nullable Request request) { }
-                            @Nullable
-                            @Override
-                            public Request getRequest() {return null; }
-                        });
+                                }
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {}
+                                @Override
+                                public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
+                                @Override
+                                public void removeCallback(@NonNull SizeReadyCallback cb) {}
+                                @Override
+                                public void setRequest(@Nullable Request request) { }
+                                @Nullable
+                                @Override
+                                public Request getRequest() {return null; }
+                            });
 
-                //Log.e("DOWNLOAD TASK",SERVER_IMGURL_API + params[0].get(i) + " T" +  params[0].get(i));
-                //new DownloadTask().execute(SERVER_IMGURL_API + params[0].get(i), params[0].get(i));
+                }
             } return null;}
         }
 
@@ -1210,7 +1478,36 @@ public class ZeroFragment extends Fragment{
             }
         }
     }
+    void createAddDatadbFAV(String fvuniqid, String byemail, String boolvar, String genre, String created_at, String Id)
+    {
+        Log.e("KEMAL db", "jai demarrer");
+        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_FAV);
+        ContentValues values = new ContentValues();
+        //values.put(databaseContract.dataEntry.hID,Id);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_fvuniqid,fvuniqid);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_byemail,byemail);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_boolvar,boolvar);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_genre,genre);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_created_at,created_at);
+        //long kid =myDB.insert(databaseContract.dataEntry.TABLE_NAME_FAV, null, values);
+        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAV, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        //if(kid == -1){
+        //    long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAV, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        //}else {
+        //}
+    }
 
+    void createAddDatadbPROFS(String foremail, String imgvar, String Id)
+    {
+        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_PROFILS);
+        ContentValues values = new ContentValues();
+        //values.put(databaseContract.dataEntry.hID,Id);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_foremail,foremail);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_imgvar,imgvar);
+        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAV, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+    }
     private class DownloadTask extends AsyncTask<String,Void, Bitmap>{
         protected void onPreExecute(){}
         protected Bitmap doInBackground(String...urls){
@@ -1262,15 +1559,17 @@ public class ZeroFragment extends Fragment{
         @Override
         protected String doInBackground(String... params) {
             try {
+
                 Thread.sleep(500);
                 Log.e("KEMAL","STARTUP " + params[6]);
-
+                new GetFAV().execute(params[7],params[6]);
                 new GetRESTO().execute(params[0],params[6] );
                 new GetHotel().execute(params[1],params[6]);
                 new GetSITES().execute(params[2],params[6]);
                 new GetSERLI().execute(params[3],params[6]);
                 new GetTRANS().execute(params[4],params[6]);
                 new GetINNOV().execute(params[5],params[6]);
+                new GetPROFS().execute(params[8],params[6]);
             } catch (InterruptedException  e) {
                 Toast.makeText(getContext(),"Erreur systeme",Toast.LENGTH_LONG);
             }
@@ -1287,4 +1586,53 @@ public class ZeroFragment extends Fragment{
         }
     }
 
+    private int RatingNumber(String fvuniqid){
+
+        favdb obase = new favdb(getContext());
+        List<fav> result = obase.getFavByFvUniq(fvuniqid);
+        int workT = 0;
+        Log.e("KEMAL","SIZE OF FAVORITE" + result.size());
+        if(result.size() > 0){
+        for(int i = 0; i < result.size(); i++)
+        {
+            if (result.get(i).getBoolvar() == "true"){
+                workT = workT + 1;
+            }else {
+                workT =workT + 1;
+            }
+        }}
+        return workT;
+    }
+    private boolean CheckFavoriteInstant(String fvuniqid){
+        SessionManager session = new SessionManager(getContext());
+        if (session.isLoggedIn()) {
+            SQLiteHandler db;
+            db = new SQLiteHandler(getContext());
+            HashMap<String, String> user = db.getUserDetails();
+            String email = user.get("settings");
+            favdb obase = new favdb(getContext());
+            List<fav> result = obase.getFavByFvuniqAndEmail(fvuniqid,email);
+            if(result.size() > 0){
+                return true;
+            }else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    private void AddFavoriteInstant(String Title, String Adress,String Rat,String Desc,String Imurl,String Unic){
+        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_PROFILS);
+        ContentValues values = new ContentValues();
+        //values.put(databaseContract.dataEntry.hID,Id);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_TITLEs,Title);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_ADRSS,Adress);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_RAT,Rat);
+        values.put( databaseContract.dataEntry.COLUMN_NAME_unic,Desc);
+        values.put( databaseContract.dataEntry.COLUMN_NAME_imurl,Imurl);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_DESC,Unic);
+        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAVL, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+    }
 }

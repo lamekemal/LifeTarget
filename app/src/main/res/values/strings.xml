@@ -49,4 +49,5 @@
     <string name="title_activity_main4cservice">Centre Service</string>
     <string name="title_activity_reservation">Reservation</string>
     <string name="title_activity_code_promos">CodePromos</string>
+    <string name="title_activity_profilpost">profilpost</string>
 </resources>

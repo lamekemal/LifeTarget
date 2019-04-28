@@ -1,6 +1,7 @@
 package com.archeosbj.lifetarget.Adpter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.archeosbj.lifetarget.R;
+import com.archeosbj.lifetarget.imageViewer;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -40,10 +42,20 @@ public class InnovImageAdapter extends RecyclerView.Adapter<InnovImageAdapter.Vi
                 .load(imageList.get(position))
                 .into( holder.image);
         //holder.image.setImageResource(imageList.get(position));
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, imageViewer.class);
+                String[] RestoItm = new String[10];
+                RestoItm[9] =  imageList.get(position).toString();
+                intent.putExtra("ITEM",RestoItm);
+                context.startActivity(intent);
+            }
+        });
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showProduct(v, produit);
+
             }
         });
     }

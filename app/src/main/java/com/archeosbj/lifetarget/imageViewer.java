@@ -4,23 +4,18 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +27,7 @@ import java.io.File;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static android.support.constraint.Constraints.TAG;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
 
 public class imageViewer extends AppCompatActivity {
@@ -201,30 +197,50 @@ public class imageViewer extends AppCompatActivity {
             String newDir = path + File.separator + DATA_DIRECTORI;
             String newDiri = newDir + File.separator + "images";
             if (getArguments().getInt(ARG_SECTION_NUMBER)==1){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
-                String fileph = newDiri + File.separator + maxyT[0];
-                Integer intR1 = getArguments().getInt("WTH");
-                Integer intR2 = getArguments().getInt("HGH");
-                setBitmapImageFormMomory(fileph,textView, intR2, intR1);
-                PhotoViewAttacher pAttacher;
-                pAttacher = new PhotoViewAttacher(textView);
-                pAttacher.update();
+
+                if( !(maxyT[0] == "")) {
+                    ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                    //String[] maxyT = getArguments().getStringArray("ITM");
+                    String fileph = newDiri + File.separator + maxyT[0];
+                    Integer intR1 = getArguments().getInt("WTH");
+                    Integer intR2 = getArguments().getInt("HGH");
+                    setBitmapImageFormMomory(fileph, textView, intR2, intR1);
+                    PhotoViewAttacher pAttacher;
+                    pAttacher = new PhotoViewAttacher(textView);
+                    pAttacher.update();
+                }
+                try {
+                    if(!(maxyT[9] == "")){
+                        ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                        Glide.with(getContext())
+                                .load(maxyT[9])
+                                .into(textView);
+                    }
+                }catch (ArrayIndexOutOfBoundsException e){
+                    Log.e(TAG, "ArrayIndexOutOfBoundsException " + e.getMessage());
+                }
+
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER)==2){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
-                String fileph = newDiri + File.separator + maxyT[1];
-                Integer intR1 = getArguments().getInt("WTH");
-                Integer intR2 = getArguments().getInt("HGH");
-                setBitmapImageFormMomory(fileph,textView, intR2, intR1);
-                PhotoViewAttacher pAttacher;
-                pAttacher = new PhotoViewAttacher(textView);
-                pAttacher.update();
+                if( !(maxyT[1] == "")){
+                    ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+
+                    String fileph = newDiri + File.separator + maxyT[1];
+                    Integer intR1 = getArguments().getInt("WTH");
+                    Integer intR2 = getArguments().getInt("HGH");
+                    setBitmapImageFormMomory(fileph,textView, intR2, intR1);
+                    PhotoViewAttacher pAttacher;
+                    pAttacher = new PhotoViewAttacher(textView);
+                    pAttacher.update();
+                }
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER)==3){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
+                if( !(maxyT[2] == "")){
+                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                //String[] maxyT = getArguments().getStringArray("ITM");
                 String fileph = newDiri + File.separator + maxyT[2];
                 Integer intR1 = getArguments().getInt("WTH");
                 Integer intR2 = getArguments().getInt("HGH");
@@ -232,39 +248,49 @@ public class imageViewer extends AppCompatActivity {
                 PhotoViewAttacher pAttacher;
                 pAttacher = new PhotoViewAttacher(textView);
                 pAttacher.update();
+                }
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER)==4){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
-                String fileph = newDiri + File.separator + maxyT[3];
-                Integer intR1 = getArguments().getInt("WTH");
-                Integer intR2 = getArguments().getInt("HGH");
-                setBitmapImageFormMomory(fileph,textView,intR2, intR1);
-                PhotoViewAttacher pAttacher;
-                pAttacher = new PhotoViewAttacher(textView);
-                pAttacher.update();
+                if( !(maxyT[3] == "")) {
+                    ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                    //String[] maxyT = getArguments().getStringArray("ITM");
+                    String fileph = newDiri + File.separator + maxyT[3];
+                    Integer intR1 = getArguments().getInt("WTH");
+                    Integer intR2 = getArguments().getInt("HGH");
+                    setBitmapImageFormMomory(fileph, textView, intR2, intR1);
+                    PhotoViewAttacher pAttacher;
+                    pAttacher = new PhotoViewAttacher(textView);
+                    pAttacher.update();
+                }
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER)==5){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
-                String fileph = newDiri + File.separator + maxyT[4];
-                Integer intR1 = getArguments().getInt("WTH");
-                Integer intR2 = getArguments().getInt("HGH");
-                setBitmapImageFormMomory(fileph,textView,intR2, intR1);
-                PhotoViewAttacher pAttacher;
-                pAttacher = new PhotoViewAttacher(textView);
-                pAttacher.update();
+                if( !(maxyT[4] == "")) {
+                    ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                    //String[] maxyT = getArguments().getStringArray("ITM");
+                    String fileph = newDiri + File.separator + maxyT[4];
+                    Integer intR1 = getArguments().getInt("WTH");
+                    Integer intR2 = getArguments().getInt("HGH");
+                    setBitmapImageFormMomory(fileph, textView, intR2, intR1);
+                    PhotoViewAttacher pAttacher;
+                    pAttacher = new PhotoViewAttacher(textView);
+                    pAttacher.update();
+                }
             }
             if (getArguments().getInt(ARG_SECTION_NUMBER)==6){
-                ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
                 String[] maxyT = getArguments().getStringArray("ITM");
-                String fileph = newDiri + File.separator + maxyT[5];
-                Integer intR1 = getArguments().getInt("WTH");
-                Integer intR2 = getArguments().getInt("HGH");
-                setBitmapImageFormMomory(fileph,textView,intR2, intR1);
-                PhotoViewAttacher pAttacher;
-                pAttacher = new PhotoViewAttacher(textView);
-                pAttacher.update();
+                if( !(maxyT[5] == "")) {
+                    ImageView textView = (ImageView) rootView.findViewById(R.id.section_label);
+                    //String[] maxyT = getArguments().getStringArray("ITM");
+                    String fileph = newDiri + File.separator + maxyT[5];
+                    Integer intR1 = getArguments().getInt("WTH");
+                    Integer intR2 = getArguments().getInt("HGH");
+                    setBitmapImageFormMomory(fileph, textView, intR2, intR1);
+                    PhotoViewAttacher pAttacher;
+                    pAttacher = new PhotoViewAttacher(textView);
+                    pAttacher.update();
+                }
             }
             return rootView;
         }

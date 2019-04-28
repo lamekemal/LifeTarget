@@ -1,6 +1,8 @@
 package com.archeosbj.lifetarget;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.archeosbj.lifetarget.Adpter.HotelAdapter;
@@ -23,15 +26,21 @@ import com.archeosbj.lifetarget.Model.Serli;
 import com.archeosbj.lifetarget.Model.Trans;
 import com.archeosbj.lifetarget.Model.hotel;
 import com.archeosbj.lifetarget.Model.resto;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.archeosbj.lifetarget.data.database;
+import com.archeosbj.lifetarget.data.databaseContract;
 import com.archeosbj.lifetarget.data.hoteldb;
 import com.archeosbj.lifetarget.data.restodb;
 import com.archeosbj.lifetarget.data.serlidb;
 import com.archeosbj.lifetarget.data.transdb;
 import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.snatik.storage.Storage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
 
 public class categoriesView extends AppCompatActivity {
     //worked search zone
@@ -47,7 +56,8 @@ public class categoriesView extends AppCompatActivity {
     public static String CATEGORIES_INT = "APP_CATEGORIES";
     public static String CATEGORIES_INDEX = "APP_CATEGORIES_INDEX"; //INDEX IS INTEGER
     public static String CATEGORIES_SENDER = "APP_CATEGORIES_SENDER";
-
+    private ProgressDialog pDialog;
+    private ProgressBar pBar;
     private String categoriesString = "Life Target";
 
     @Override
@@ -61,6 +71,10 @@ public class categoriesView extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         Intent intent = getIntent();
 
+        pDialog = new ProgressDialog(this);
+        pDialog.setCancelable(true);
+        pBar = (ProgressBar)  findViewById(R.id.load_prg);
+        pBar.setMax(100);
 
         sendbycat = intent.getIntExtra(CATEGORIES_SENDER,2) ==1;
         indexcat = intent.getIntExtra(CATEGORIES_INDEX,9);
@@ -167,83 +181,21 @@ public class categoriesView extends AppCompatActivity {
        // Toast.makeText(getApplicationContext(),"CATEGORISER",Toast.LENGTH_SHORT).show();
             //CATEGORIE VIEW
             if(indexcat ==1){
-                //Toast.makeText(getApplicationContext(),String.valueOf(sendbycat),Toast.LENGTH_SHORT).show();
-                //init adpter first  //condition de categorie ici //important (sameListnercode)
-                restodb obase = new restodb(this);
-                RestoAdapter xadapter = new RestoAdapter(this,obase.getResto(),new RestoAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(resto item) {
-                        //on item click
-                        Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-                        String[] RestoItm = new String[24];
-                        RestoItm[0] = "";
-                        RestoItm[1] = String.valueOf(item.getId()) ;
-                        RestoItm[2] = item.getTitle();
-                        RestoItm[3] = item.getAdress();
-                        RestoItm[4] = item.getHoraire();
-                        RestoItm[5] = item.getSiteweb();
-                        RestoItm[6] = item.getDescription();
-                        RestoItm[7] = item.getLongdescription();
-                        RestoItm[8] = item.getUniqueid();
-                        RestoItm[9] = item.getRating();
-                        RestoItm[10] = item.getService();
-                        RestoItm[11] = item.getPointfort();
-                        RestoItm[12] = item.getPointfaible();
-                        RestoItm[13] = item.getPrinpimage();
-                        RestoItm[14] = item.getMets();
-                        RestoItm[15] = item.getModified();
-                        RestoItm[16] = item.getGaleryOne();
-                        RestoItm[17] =  item.getGalerytwo();
-                        RestoItm[18] = item.getGaleryfor();
-                        RestoItm[19] =  item.getGaleryfive();
-                        RestoItm[20] =  item.getGalerysix();
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO);
+                Log.e("TEST KEMAL", "whislen boot = " + result.size());
+                if(result.size()>2){
+                  new  loadData().execute(result);
+                }
+                actResto();
 
-                        intent.putExtra("ITEM",RestoItm);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-                    }
-                });
-                Log.e("TEST DATA", "RESTO ROW" + obase.getResto().size());
-                recyclerView.setAdapter(xadapter);
             }else if(indexcat ==2){
-                //Toast.makeText(getApplicationContext(),String.valueOf(sendbycat),Toast.LENGTH_SHORT).show();
-                //init adpter first  //condition de categorie ici //important (sameListnercode)
-                hoteldb lbase = new hoteldb(this);
-                HotelAdapter yadapter = new HotelAdapter(this,lbase.getHotel(),new HotelAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(hotel item) {
-                        //on item click
-                        Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-                        String[] HotelItm = new String[24];
-                        HotelItm[0] = "";
-                        HotelItm[1] = String.valueOf(item.getId()) ;
-                        HotelItm[2] = item.getTitle();
-                        HotelItm[3] = item.getAdress();
-                        HotelItm[4] = item.getPayement();
-                        HotelItm[5] = item.getSiteweb();
-                        HotelItm[6] = item.getDescription();
-                        HotelItm[7] = item.getLongdescription();
-                        HotelItm[8] = item.getUniqueid();
-                        HotelItm[9] = item.getRating();
-                        HotelItm[10] = item.getService();
-                        HotelItm[11] = item.getPointfort();
-                        HotelItm[12] = item.getPointfaible();
-                        HotelItm[13] = item.getPrinpimage();
-                        HotelItm[14] = item.getMets();
-                        HotelItm[15] = item.getModified();
-                        HotelItm[16] = item.getGaleryOne();
-                        HotelItm[17] =  item.getGalerytwo();
-                        HotelItm[18] = item.getGaleryfor();
-                        HotelItm[19] =  item.getGaleryfive();
-                        HotelItm[20] =  item.getGalerysix();
-
-                        intent.putExtra("ITEM",HotelItm);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-                    }
-                });
-                recyclerView.setAdapter(yadapter);
-
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actHotel();
             }else if(indexcat ==3){
                 //Toast.makeText(getApplicationContext(),String.valueOf(sendbycat),Toast.LENGTH_SHORT).show();
                 /*dbase = new database(getBaseContext());
@@ -268,84 +220,19 @@ public class categoriesView extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);*/
 
             }else if(indexcat ==4){
-                serlidb nbase = new serlidb(this);
-                SerliAdapter liadapter = new SerliAdapter(this,nbase.getSerli(),new SerliAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Serli item) {
-                        //on item click
-                        Intent intent = new Intent(getBaseContext(), serliview.class);
-                        String[] HotelItm = new String[28];
-                        HotelItm[0] = "";
-                        HotelItm[1] = String.valueOf(item.getId()) ;
-                        HotelItm[2] = item.getName();
-                        HotelItm[3] = item.getContact();
-                        HotelItm[4] = item.getUniqueid();
-                        HotelItm[5] = item.getService();
-                        HotelItm[6] = item.getPointfort();
-                        HotelItm[7] = item.getPrice();
-                        HotelItm[8] = item.getPrimpimage();
-                        HotelItm[9] = item.getGaleryOne();
-                        HotelItm[10] = item.getGalerytwo();
-                        HotelItm[11] = item.getGalerytree();
-                        HotelItm[12] = item.getGaleryfour();
-                        HotelItm[13] = item.getGaleryfive();
-                        HotelItm[14] = item.getGalerysix();
-                        HotelItm[15] = item.getZonelivre();
-                        HotelItm[16] = item.getMaxlivre();
-                        HotelItm[17] =  item.getSiteweb();
-                        HotelItm[18] = item.getHoraire();
-                        HotelItm[19] =  item.getReserveone();
-                        HotelItm[20] =  item.getReservetwo();
-                        HotelItm[21] =  item.getExtras();
-                        HotelItm[22] =  item.getDescription();
-                        HotelItm[23] =  item.getPayement();
-                        intent.putExtra("ITEM",HotelItm);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-                    }
-                });
-                recyclerView.setAdapter(liadapter);
-
-
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actSerli();
             }else if(indexcat ==5){
-                transdb lbase = new transdb(this);
-                TransAdapter yadapter = new TransAdapter(this,lbase.getTrans(),new TransAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Trans item) {
-                        //on item click
-                        Intent intent = new Intent(getBaseContext(), TransportActivity.class);
-
-                        String[] HotelItm = new String[24];
-                        HotelItm[0] = "";
-                        HotelItm[1] = String.valueOf(item.getId()) ;
-                        HotelItm[2] = item.getName();
-                        HotelItm[3] = item.getContact();
-                        HotelItm[4] = item.getUniqueid();
-                        HotelItm[5] = item.getService();
-                        HotelItm[6] = item.getPointfort();
-                        HotelItm[7] = item.getPrice();
-                        HotelItm[8] = item.getMail();
-                        HotelItm[9] = item.getPrimpimage();
-                        HotelItm[10] = item.getGaleryOne();
-                        HotelItm[11] = item.getGalerytwo();
-                        HotelItm[12] = item.getGalerytree();
-                        HotelItm[13] = item.getTransline();
-                        HotelItm[14] = item.getLoanbus();
-                        HotelItm[15] =  item.getMaxcap();
-                        HotelItm[16] = item.getHoraire();
-                        HotelItm[17] =  item.getReserveone();
-                        HotelItm[19] =  item.getReservetwo();
-                        HotelItm[20] =  item.getExtras();
-                        HotelItm[21] =  item.getDescription();
-                        HotelItm[22] =  item.getPayement();
-                        intent.putExtra("ITEM",HotelItm);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-                    }
-                });
-                recyclerView.setAdapter(yadapter);
-
-
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actTrans();
             }else if(indexcat ==6){
 
             }
@@ -353,6 +240,160 @@ public class categoriesView extends AppCompatActivity {
 
 
     }
+
+    void actResto(){
+        restodb obase = new restodb(this);
+        RestoAdapter xadapter = new RestoAdapter(this,obase.getResto(),new RestoAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(resto item) {
+                //on item click
+                Intent intent = new Intent(getBaseContext(), hotelviwer.class);
+                String[] RestoItm = new String[24];
+                RestoItm[0] = "1";
+                RestoItm[1] = String.valueOf(item.getId()) ;
+                RestoItm[2] = item.getTitle();
+                RestoItm[3] = item.getAdress();
+                RestoItm[4] = item.getHoraire();
+                RestoItm[5] = item.getSiteweb();
+                RestoItm[6] = item.getDescription();
+                RestoItm[7] = item.getLongdescription();
+                RestoItm[8] = item.getUniqueid();
+                RestoItm[9] = item.getRating();
+                RestoItm[10] = item.getService();
+                RestoItm[11] = item.getPointfort();
+                RestoItm[12] = item.getPointfaible();
+                RestoItm[13] = item.getPrinpimage();
+                RestoItm[14] = item.getMets();
+                RestoItm[15] = item.getModified();
+                RestoItm[16] = item.getGaleryOne();
+                RestoItm[17] =  item.getGalerytwo();
+                RestoItm[18] = item.getGaleryfor();
+                RestoItm[19] =  item.getGaleryfive();
+                RestoItm[20] =  item.getGalerysix();
+
+                intent.putExtra("ITEM",RestoItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+        Log.e("TEST DATA", "RESTO ROW" + obase.getResto().size());
+        recyclerView.setAdapter(xadapter);
+    }
+    void actHotel(){
+        hoteldb lbase = new hoteldb(this);
+        HotelAdapter yadapter = new HotelAdapter(this,lbase.getHotel(),new HotelAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(hotel item) {
+                //on item click
+                Intent intent = new Intent(getBaseContext(), hotelviwer.class);
+                String[] HotelItm = new String[24];
+                HotelItm[0] = "2";
+                HotelItm[1] = String.valueOf(item.getId()) ;
+                HotelItm[2] = item.getTitle();
+                HotelItm[3] = item.getAdress();
+                HotelItm[4] = item.getPayement();
+                HotelItm[5] = item.getSiteweb();
+                HotelItm[6] = item.getDescription();
+                HotelItm[7] = item.getLongdescription();
+                HotelItm[8] = item.getUniqueid();
+                HotelItm[9] = item.getRating();
+                HotelItm[10] = item.getService();
+                HotelItm[11] = item.getPointfort();
+                HotelItm[12] = item.getPointfaible();
+                HotelItm[13] = item.getPrinpimage();
+                HotelItm[14] = item.getMets();
+                HotelItm[15] = item.getModified();
+                HotelItm[16] = item.getGaleryOne();
+                HotelItm[17] =  item.getGalerytwo();
+                HotelItm[18] = item.getGaleryfor();
+                HotelItm[19] =  item.getGaleryfive();
+                HotelItm[20] =  item.getGalerysix();
+
+                intent.putExtra("ITEM",HotelItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+        recyclerView.setAdapter(yadapter);
+    }
+    void actSerli(){
+        serlidb nbase = new serlidb(this);
+        SerliAdapter liadapter = new SerliAdapter(this,nbase.getSerli(),new SerliAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Serli item) {
+                //on item click
+                Intent intent = new Intent(getBaseContext(), serliview.class);
+                String[] HotelItm = new String[28];
+                HotelItm[0] = "4";
+                HotelItm[1] = String.valueOf(item.getId()) ;
+                HotelItm[2] = item.getName();
+                HotelItm[3] = item.getContact();
+                HotelItm[4] = item.getUniqueid();
+                HotelItm[5] = item.getService();
+                HotelItm[6] = item.getPointfort();
+                HotelItm[7] = item.getPrice();
+                HotelItm[8] = item.getPrimpimage();
+                HotelItm[9] = item.getGaleryOne();
+                HotelItm[10] = item.getGalerytwo();
+                HotelItm[11] = item.getGalerytree();
+                HotelItm[12] = item.getGaleryfour();
+                HotelItm[13] = item.getGaleryfive();
+                HotelItm[14] = item.getGalerysix();
+                HotelItm[15] = item.getZonelivre();
+                HotelItm[16] = item.getMaxlivre();
+                HotelItm[17] =  item.getSiteweb();
+                HotelItm[18] = item.getHoraire();
+                HotelItm[19] =  item.getReserveone();
+                HotelItm[20] =  item.getReservetwo();
+                HotelItm[21] =  item.getExtras();
+                HotelItm[22] =  item.getDescription();
+                HotelItm[23] =  item.getPayement();
+                intent.putExtra("ITEM",HotelItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+        recyclerView.setAdapter(liadapter);
+    }
+
+    void actTrans(){
+        transdb lbase = new transdb(this);
+        TransAdapter yadapter = new TransAdapter(this,lbase.getTrans(),new TransAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Trans item) {
+                //on item click
+                Intent intent = new Intent(getBaseContext(), TransportActivity.class);
+                String[] HotelItm = new String[24];
+                HotelItm[0] = "5";
+                HotelItm[1] = String.valueOf(item.getId()) ;
+                HotelItm[2] = item.getName();
+                HotelItm[3] = item.getContact();
+                HotelItm[4] = item.getUniqueid();
+                HotelItm[5] = item.getService();
+                HotelItm[6] = item.getPointfort();
+                HotelItm[7] = item.getPrice();
+                HotelItm[8] = item.getMail();
+                HotelItm[9] = item.getPrimpimage();
+                HotelItm[10] = item.getGaleryOne();
+                HotelItm[11] = item.getGalerytwo();
+                HotelItm[12] = item.getGalerytree();
+                HotelItm[13] = item.getTransline();
+                HotelItm[14] = item.getLoanbus();
+                HotelItm[15] =  item.getMaxcap();
+                HotelItm[16] = item.getHoraire();
+                HotelItm[17] =  item.getReserveone();
+                HotelItm[19] =  item.getReservetwo();
+                HotelItm[20] =  item.getExtras();
+                HotelItm[21] =  item.getDescription();
+                HotelItm[22] =  item.getPayement();
+                intent.putExtra("ITEM",HotelItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+        recyclerView.setAdapter(yadapter);
+    }
+
 
     private void makeuniversalsearch() {
         //init adpter first  //condition de categorie ici //important (sameListnercode)
@@ -364,6 +405,87 @@ public class categoriesView extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
     }
+    private void showDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    private class loadData extends AsyncTask<ArrayList<String>,Integer,Boolean> {
+
+            @Override
+            protected Boolean doInBackground(ArrayList<String>... params) {
+
+                int whis =0;
+                int whiset = 0;
+                int whislen = params[0].size();
+                Log.e("TEST KEMAL", "whislen boot = " + whislen);
+                while (whis < whislen)
+                {
+                    final String filename = params[0].get(whis);
+                    Storage storage = new Storage(getApplicationContext());
+                    String path = storage.getExternalStorageDirectory();
+                    String newDir = path + File.separator + DATA_DIRECTORI;
+                    String newDiri = newDir + File.separator + "images";
+                    storage.createDirectory(newDir);
+                    storage.createDirectory(newDiri);
+                    String fileph = newDiri + File.separator + filename;
+                    if(storage.isFileExist(fileph)){
+                        whiset=whiset + 1;
+                    } else {
+                        whiset= whiset+0;
+                    }
+                    whis = whis + 1;
+                    int prg = Math.round ((whiset * 100)/whislen);
+                    Log.e("TEST KEMAL", "whislen for  = " + filename + " on ID = " + whis);
+                    publishProgress(prg);
+                }
+                return true;
+            }
+
+            @Override
+            public void onPreExecute()
+            {
+                pDialog.setMessage("Telechargement ...");
+                showDialog();
+                pBar.setVisibility(View.VISIBLE);
+            }
+
+
+            @Override
+            public void onPostExecute(Boolean result)
+            {
+                super.onPostExecute(result);
+                if (result){
+                    pBar.setVisibility(View.GONE);
+                    if(indexcat ==1){
+                        actResto();
+                    }else if(indexcat ==2){
+                        actHotel();
+                    }else if(indexcat ==3){
+
+                    }else if(indexcat ==4){
+                        actSerli();
+                    }else if(indexcat ==5){
+                        actTrans();
+                    }else if(indexcat ==6){
+                    }
+                }
+                hideDialog();
+            }
+
+            @Override
+            public void onProgressUpdate(Integer... params)
+            {
+                 pBar.setProgress(params[0]);
+                // show in spinner, access UI elements
+            }
+
+        }
 
     void recomandCLIK(Life item){
         if(item.getDescription() =="Service de livraison"){

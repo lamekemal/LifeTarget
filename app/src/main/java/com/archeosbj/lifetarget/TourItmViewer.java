@@ -15,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -153,12 +151,30 @@ public class TourItmViewer extends AppCompatActivity {
         applyIntentItemArry();
         fabactionservice();
     }
-
+    void applyimageck(ImageView img, final String first){
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getBaseContext(), imageViewer.class);
+                String[] RestoItm = new String[7];
+                RestoItm[0] = first;
+                RestoItm[1] = Primpimage;
+                RestoItm[2] = Galerysix ;
+                RestoItm[3] = Galerytwo ;
+                RestoItm[4] = Galeryfour ;
+                RestoItm[5] = Galeryfive;
+                RestoItm[6] = GaleryOne;
+                intent.putExtra("ITEM",RestoItm);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+            }
+        });
+    }
     private void applyIntentItemArry() {
 
         TextView ctrLocalisation = (TextView) findViewById(R.id.text_localisation);
         TextView ctrTitle = (TextView) findViewById(R.id.text_title);
-        TextView ctrPointfort = (TextView) findViewById(R.id.service_text);
+       // TextView ctrPointfort = (TextView) findViewById(R.id.service_text);
         //TextView ctrExtras = (TextView) findViewById(R.id.service_text);
 
         ctrLocalisation.setText(Localisation);
@@ -173,13 +189,21 @@ public class TourItmViewer extends AppCompatActivity {
         final ImageView ctrGaleryfive = (ImageView) findViewById(R.id.galery_five);
         final ImageView ctrGalerysix = (ImageView) findViewById(R.id.galery_six);
         final ImageView ctrGaleryseven = (ImageView) findViewById(R.id.galery_seven);
+        applyimageck(ctrGaleryOne,GaleryOne);
+        applyimageck(ctrGalerytwo,Galerytwo);
+        applyimageck(ctrGalerytree,Galerytree);
+        applyimageck(ctrGaleryfor,Galeryfour);
+        applyimageck(ctrGaleryfive,Galeryfive);
+        applyimageck(ctrGalerysix,Galerysix);
 
         final NavigationView Navview = (NavigationView) findViewById(R.id.nav_view);
-        Menu menu = Navview.getMenu();
+        View hView =  Navview.getHeaderView(0);
+        TextView nav_desc = (TextView)hView.findViewById(R.id.dskText);
+        /*Menu menu = Navview.getMenu();
         final MenuItem ctrdescription = menu.findItem(R.id.activity_main_alerts_menu_item);
 
-        ctrdescription.setTitle(Extras);
-
+        ctrdescription.setTitle(Extras);*/
+        nav_desc.setText(Extras);
         Storage storage = new Storage(contxent);
         String path = storage.getExternalStorageDirectory();
         String newDir = path + File.separator + DATA_DIRECTORI;
@@ -247,7 +271,7 @@ public class TourItmViewer extends AppCompatActivity {
                     HashMap<String, String> user = db.getUserDetails();
                     Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String[] HotelItm = new String[28];
                     HotelItm[0] = "";
                     HotelItm[1] = name;
@@ -278,7 +302,7 @@ public class TourItmViewer extends AppCompatActivity {
                     HashMap<String, String> user = db.getUserDetails();
                     Intent intent = new Intent(getApplicationContext(), Main4cservice.class);
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String[] HotelItm = new String[28];
                     HotelItm[0] = "";
                     HotelItm[1] = name;
@@ -308,7 +332,7 @@ public class TourItmViewer extends AppCompatActivity {
 
                     HashMap<String, String> user = db.getUserDetails();
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     String title =  Name;
                     String uniqi =  Uniqueid;
                     String userURL = "";
@@ -342,7 +366,7 @@ public class TourItmViewer extends AppCompatActivity {
 
                     HashMap<String, String> user = db.getUserDetails();
                     String name = user.get("name");
-                    String email = user.get("email");
+                    String email = user.get("settings");
                     markpostfav(Uniqueid,email,"true", Name);
                 }else{
                     Snackbar.make( v,"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)

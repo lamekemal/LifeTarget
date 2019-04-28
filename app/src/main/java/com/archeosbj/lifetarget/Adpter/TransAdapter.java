@@ -57,7 +57,7 @@ public class TransAdapter extends RecyclerView.Adapter<TransViewHolder>{
         holder.title.setText(Hotel.get(position).getName());
         holder.adress.setText(Hotel.get(position).getTransline());
         holder.description.setText(Hotel.get(position).getDescription());
-        //holder.rating.setText(Hotel.get(position).getRating());
+        holder.rating.setText(Hotel.get(position).getReserveone());
 
         Storage storage = new Storage(context);
         String path = storage.getExternalStorageDirectory();
