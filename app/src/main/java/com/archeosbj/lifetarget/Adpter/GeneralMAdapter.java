@@ -1,8 +1,11 @@
+/*
+ * Production de Kemal DARA, destinée à une utilisation uniquement professionnel, destinée Exclusivement à LifeTarget. Toutes copies ou reproduction est interdites.
+ */
+
 package com.archeosbj.lifetarget.Adpter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,20 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.archeosbj.lifetarget.Model.resto;
+import com.archeosbj.lifetarget.Model.GeneralModel;
 import com.archeosbj.lifetarget.R;
 import com.snatik.storage.Storage;
 
 import java.io.File;
 import java.util.List;
 
+import static com.archeosbj.lifetarget.Adpter.HotelAdapter.decodeSampledBitmapFromResource;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
 
-class RestoViewHolder extends RecyclerView.ViewHolder {
+class  GeneralMViewHolder extends RecyclerView.ViewHolder {
     public TextView title, rating, description, adress;
     public ImageView thumbnail;
 
-    public RestoViewHolder(View itemView){
+    public  GeneralMViewHolder(View itemView){
         super(itemView);
         title = (TextView) itemView.findViewById(R.id.title);
         adress = (TextView) itemView.findViewById(R.id.adress);
@@ -33,50 +37,53 @@ class RestoViewHolder extends RecyclerView.ViewHolder {
     }
 }
 
-
-public class RestoAdapter extends RecyclerView.Adapter<RestoViewHolder> {
+public class GeneralMAdapter extends RecyclerView.Adapter< GeneralMViewHolder>{
     private Context context;
-    private List<resto> Resto;
-    private final OnItemClickListener listener;
-    public RestoAdapter(Context context, List<resto> Resto, OnItemClickListener listener) {
+    private List<GeneralModel> GM;
+    private final GeneralMAdapter.OnItemClickListener listener;
+
+    public GeneralMAdapter(Context context, List<GeneralModel> generalModel, OnItemClickListener listener) {
         this.context = context;
-        this.Resto = Resto;
+        this.GM = generalModel;
         this.listener = listener;
     }
+
     public interface OnItemClickListener {
-        void onItemClick(resto item);
-    }
-    @Override
-    public RestoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.searchitem, parent,false );
-        return new RestoViewHolder(itemView);
+        void onItemClick(GeneralModel item);
     }
 
     @Override
-    public void onBindViewHolder(RestoViewHolder holder, final int position) {
-        holder.title.setText(Resto.get(position).getTitle());
-        holder.adress.setText(Resto.get(position).getAdress());
-        holder.description.setText(Resto.get(position).getDescription());
-        holder.rating.setText(Resto.get(position).getRating());
+    public GeneralMViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View itemView = inflater.inflate(R.layout.searchitem, parent,false );
+        return new GeneralMViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder( GeneralMViewHolder holder, final int position) {
+        holder.title.setText(GM.get(position).getTitle());
+        holder.adress.setText(GM.get(position).getAdress());
+        holder.description.setText(GM.get(position).getDescription());
+        holder.rating.setText(GM.get(position).getRating());
 
         Storage storage = new Storage(context);
         String path = storage.getExternalStorageDirectory();
         String newDir = path + File.separator + DATA_DIRECTORI;
         String newDiri = newDir + File.separator + "images";
-        String fileph = newDiri + File.separator + Resto.get(position).getPrinpimage();
-        Bitmap bm = BitmapFactory.decodeFile(fileph);
+        String fileph = newDiri + File.separator + GM.get(position).getUrlimage();
+        //hotelviwer.imageManupulate.setBitmapImageFormMomory(fileph,holder.thumbnail);
+        Bitmap bm = decodeSampledBitmapFromResource(fileph,95,95);
         holder.thumbnail.setImageBitmap(bm);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                listener.onItemClick(Resto.get(position));
+                listener.onItemClick(GM.get(position));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return Resto.size();
+        return GM.size();
     }
 }

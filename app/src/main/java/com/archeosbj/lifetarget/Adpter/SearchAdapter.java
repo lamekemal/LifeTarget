@@ -1,6 +1,5 @@
 package com.archeosbj.lifetarget.Adpter;
 
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,10 +22,7 @@ class SearchViewHolder extends RecyclerView.ViewHolder {
         description = (TextView) itemView.findViewById(R.id.description);
         rating = (TextView) itemView.findViewById(R.id.rating);
     }
-
 }
-
-
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> {
     private Context context;
@@ -49,7 +45,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchViewHolder> {
         View itemView = inflater.inflate(R.layout.searchitem, parent,false );
         return new SearchViewHolder(itemView);
     }
-
 
     @Override
     public void onBindViewHolder(SearchViewHolder holder, final int position) {
