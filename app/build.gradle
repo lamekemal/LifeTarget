@@ -7,11 +7,12 @@ android {
     defaultConfig {
         applicationId "com.archeosbj.lifetarget"
         minSdkVersion 17
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+            targetSdkVersion 27
+            versionCode 5
+        versionName "0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -52,6 +53,7 @@ dependencies {
     implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
     implementation 'com.mcxiaoke.volley:library-aar:1.0.0'
     implementation 'com.google.code.gson:gson:2.4'
+    implementation 'com.squareup.okhttp:okhttp:2.4.0'
 }
 apply plugin: 'com.google.gms.google-services'
 

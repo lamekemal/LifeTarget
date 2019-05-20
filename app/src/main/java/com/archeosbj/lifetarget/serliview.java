@@ -3,16 +3,32 @@ package com.archeosbj.lifetarget;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.archeosbj.lifetarget.data.databaseContract;
+import com.archeosbj.lifetarget.loginandregistration.app.AppController;
+import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
+import com.archeosbj.lifetarget.loginandregistration.helper.SessionManager;
 import com.bumptech.glide.Glide;
 import com.snatik.storage.Storage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRECTORI;
 
@@ -42,6 +58,7 @@ public class serliview extends AppCompatActivity {
     String Description;
     String Payement;
 
+    Button likers;
     Context contxent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +91,6 @@ public class serliview extends AppCompatActivity {
         Extras = HotelItm[21];
         Description = HotelItm[22];
         Payement = HotelItm[23];
-
         applyIntentItemArry();
     }
 
@@ -98,6 +114,7 @@ public class serliview extends AppCompatActivity {
         });
     }
     private void applyIntentItemArry() {
+        final SessionManager session = new SessionManager(getApplicationContext());
         final ImageView ctr_primpimage = (ImageView) findViewById(R.id.primpimage);
         final ImageView ctr_galeryOne = (ImageView) findViewById(R.id.galeryOne);
         final ImageView ctr_galerytwo = (ImageView) findViewById(R.id.galerytwo);
@@ -105,7 +122,26 @@ public class serliview extends AppCompatActivity {
         final ImageView ctr_galeryfour = (ImageView) findViewById(R.id.galeryfour);
         final ImageView ctr_galeryfive = (ImageView) findViewById(R.id.galeryfive);
         final ImageView ctr_galerysix = (ImageView) findViewById(R.id.galerysix);
+         likers  = (Button) findViewById(R.id.butlike);
 
+         likers.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 if (session.isLoggedIn()) {
+                     //poste prefecrences
+                     SQLiteHandler db;
+                     db = new SQLiteHandler(getApplicationContext());
+
+                     HashMap<String, String> user = db.getUserDetails();
+                     String name = user.get("name");
+                     String email = user.get("settings");
+                     markpostfav(Uniqueid,email,"true", "Service de livraison");
+                 }else{
+                     Snackbar.make( v,"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                             .setAction("Se connecter", null).show();
+                 }
+             }
+         });
         applyimageck(ctr_galeryOne,GaleryOne);
         applyimageck(ctr_galerytwo,Galerytwo);
         applyimageck(ctr_galerytree,Galerytree);
@@ -181,5 +217,57 @@ public class serliview extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(Uri.fromFile(new File(filepath)))
                 .into(ImgV);
+    }
+
+    private void markpostfav(final String fvuniqid, final String byemail,
+                             final String boolvar,final String genre) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_register";
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                databaseContract.AppConfig.URL_POST_FAVORITE, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    boolean error = jObj.getBoolean("error");
+                    if (!error) {
+                        //succees
+                    } else {
+
+                        // Error occurred in registration. Get the error
+                        // message
+                        String errorMsg = jObj.getString("error_msg");
+                        Toast.makeText(getApplicationContext(),
+                                errorMsg, Toast.LENGTH_LONG).show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting params to register url
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("fvuniqid", fvuniqid);
+                params.put("byemail", byemail);
+                params.put("boolvar", boolvar);
+                params.put("genre", genre);
+
+                return params;
+            }
+
+        };
+        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 }

@@ -1,3 +1,7 @@
+/*
+ * Production de Kemal DARA, destinée à une utilisation uniquement professionnel, destinée Exclusivement à LifeTarget. Toutes copies ou reproduction est interdites.
+ */
+
 package com.archeosbj.lifetarget.httpTool;
 
 import android.util.Log;
@@ -7,7 +11,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -16,16 +19,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-public class JSONParser {
+public class JSONStringParser {
 
     static InputStream is = null;
     static JSONObject jObj = null;
     static String json = "";
 
     // constructor
-    public JSONParser() {}
+    public JSONStringParser() {}
 
-    public JSONObject getJSONFromUrl(String url) {
+    public String getJSONStringFromUrl(String url) {
 
         // Making HTTP request
         try {
@@ -34,7 +37,6 @@ public class JSONParser {
 
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
-
 
             HttpPost httpPost = new HttpPost(url);
             //httpPost.setHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10240 ");
@@ -58,7 +60,7 @@ public class JSONParser {
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
+                sb.append(line);
             }
             is.close();
             json = sb.toString();
@@ -66,16 +68,8 @@ public class JSONParser {
         } catch (Exception e) {
             Log.e("Buffer Error", "Error converting result " + e.toString());
         }
-
-        // try parse the string to a JSON object
-        try {
-            jObj = new JSONObject(json);
-        } catch (JSONException e) {
-            Log.e("JSON Parser", "Error parsing data " + e.toString());
-        }
-
         // return JSON String
-        return jObj;
+        return json;
 
     }
 }

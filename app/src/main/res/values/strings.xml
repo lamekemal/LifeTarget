@@ -43,11 +43,12 @@
     <string name="title_activity_tour_itm_viewer">TourItmViewer</string>
     <string name="title_activity_innov_viewer">InnovViewer</string>
     <string name="title_activity_main3">Main3Activity</string>
-    <string name="title_activity_splscr">LifeTarget (Beta:Origon)</string>
+    <string name="title_activity_splscr">LifeTarget</string>
     <string name="preference_key">LIFESETINGS_GENERAL</string>
     <string name="title_activity_message">Message</string>
     <string name="title_activity_main4cservice">Centre Service</string>
     <string name="title_activity_reservation">Reservation</string>
     <string name="title_activity_code_promos">CodePromos</string>
     <string name="title_activity_profilpost">profilpost</string>
+    <string name="title_activity_msgtool">msgtool</string>
 </resources>

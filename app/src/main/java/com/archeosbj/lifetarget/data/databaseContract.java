@@ -8,34 +8,36 @@ public final class databaseContract {
     private databaseContract() {}
 
     public static class AppConfig {
-        public static final String URL_POST_FAVORITE = "http://lifetarget.atwebpages.com/interact/api/client/setfav.php";
+        public static final String URL_POST_FAVORITE = "http://lifetargeteasy.com/server/interact/api/client/setfav.php";
         // Server user login url
-        public static String URL_LOGIN = "http://lifetarget.atwebpages.com/interact/api/client/login.php";
-
+        public static String URL_LOGIN = "http://lifetargeteasy.com/server/interact/api/client/login.php";
+        public static final String SET_MSG_LINK_URL = "http://lifetargeteasy.com/server/interact/api/msg/setmsg.php";
         // Server user register url
-        public static String URL_REGISTER = "http://lifetarget.atwebpages.com/interact/api/client/register.php";
+        public static String URL_REGISTER = "http://lifetargeteasy.com/server/interact/api/client/register.php";
     }
 
     /* Inner class that defines the table contents */
     public static class dataEntry implements BaseColumns {
 
         //feed section
-        public static final String FEED_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/getfeed.php";
-        public static final String SET_FEED_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/setfeed.php";
-        public static final String PROFILS_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/getprofil.php";
-        public static final String SET_PROFILS_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/feed/setprofil.php";
+        public static final String FEED_LINK_URL = "http://lifetargeteasy.com/server/interact/api/feed/getfeed.php";
+        public static final String SET_FEED_LINK_URL = "http://lifetargeteasy.com/server/interact/api/feed/setfeed.php";
+        public static final String PROFILS_LINK_URL = "http://lifetargeteasy.com/server/interact/api/feed/getprofil.php";
+        public static final String SET_PROFILS_LINK_URL = "http://lifetargeteasy.com/server/interact/api/feed/setprofil.php";
         //data link
-        public static final String HOTEL_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/gethotel.php";
-        public static final String RESTO_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/getresto.php";
-        public static final String TRANS_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/gettrans.php";
-        public static final String INNOV_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/getinnov.php";
-        public static final String FAV_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/getfav.php";
-        public static final String SERLI_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/getserli.php";
-        public static final String SITES_LINK_URL = "http://lifetarget.atwebpages.com/interact/api/service/getsites.php";
-        public static final String BLANK_COOKIES_URL ="http://lifetarget.atwebpages.com/interact/api/service/getgetting.php";
-        public static final String SERVER_IMGURL_API = "http://lifetarget.atwebpages.com/interact/uploads/";
-        public static final String SERVER_IMGURL_FEED = "http://lifetarget.atwebpages.com/interact/uploads/feedimages/";
-        public static final String SERVER_IMGURL_PROFILS = "http://lifetarget.atwebpages.com/interact/uploads/useracc/";
+        public static final String HOTEL_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/gethotel.php";
+        public static final String RESTO_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/getresto.php";
+        public static final String TRANS_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/gettrans.php";
+        public static final String INNOV_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/getinnov.php";
+        public static final String FAV_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/getfav.php";
+        public static final String SERLI_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/getserli.php";
+        public static final String SITES_LINK_URL = "http://lifetargeteasy.com/server/interact/api/service/getsites.php";
+        public static final String GET_MSG_LINK_URL = "http://lifetargeteasy.com/server/interact/api/msg/getmsg.php";
+
+        public static final String BLANK_COOKIES_URL ="http://lifetargeteasy.com/server/interact/api/service/getgetting.php";
+        public static final String SERVER_IMGURL_API = "http://lifetargeteasy.com/server/interact/uploads/";
+        public static final String SERVER_IMGURL_FEED = "http://lifetargeteasy.com/server/interact/uploads/feedimages/";
+        public static final String SERVER_IMGURL_PROFILS = "http://lifetargeteasy.com/server/interact/uploads/useracc/";
 
         //distilled data resto/feedimages/
         public static final String TABLE_NAME_RESTO = "liferesto";
@@ -69,6 +71,7 @@ public final class databaseContract {
         public static final String TRANS_JSON_CATEGORIES = "transContract";
         public static final String INNOV_JSON_CATEGORIES = "innovContract";
         public static final String FAV_JSON_CATEGORIES = "favContract";
+        public static final String MSG_JSON_CATEGORIES = "msgContract";
         public static final String SERLI_JSON_CATEGORIES = "serliContract";
 
         private static final String TABLE_USER = "lfeappusers";

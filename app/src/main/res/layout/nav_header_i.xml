@@ -12,12 +12,24 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <VideoView
+
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
         android:contentDescription="@string/nav_header_desc"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <Button
+        android:background="@color/Lavande"
+        android:textColor="@color/white"
+        android:id="@+id/buttondec"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Découvrire" />
+
     <TextView
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
@@ -31,6 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/Lavande" />
+
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_marginTop="8dp"

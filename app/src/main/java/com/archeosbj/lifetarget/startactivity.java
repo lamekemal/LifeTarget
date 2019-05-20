@@ -124,7 +124,7 @@ public class startactivity extends AppCompatActivity
         //Option 1
         personaladapter.setSuggestions(dbase.getLife());
         materialSearchBar.setCardViewElevation(10);
-        materialSearchBar.setCustomSuggestionAdapter(personaladapter);
+        //=================================<< IMPORTANT POUR ACTIVER LA RECHERCHE >> materialSearchBar.setCustomSuggestionAdapter(personaladapter);
        // Log.i("KEMAL",String.valueOf(personaladapter.getSuggestions().get(1).getAdress()));
 
         View hView =  navigationView.getHeaderView(0);
@@ -198,7 +198,14 @@ public class startactivity extends AppCompatActivity
                         launchAvSearchAct();
                         break;
                     case R.id.message:
-                        launchmessage();
+                        SessionManager xsession = new SessionManager(getApplicationContext());
+                        if (xsession.isLoggedIn()) {
+                            launchmessage();
+                        }else{
+                            Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
+                                    .setAction("Se connecter", null).show();
+                        }
+
                         break;
                     case R.id.qr_search:
                         Intent intent = new Intent(startactivity.this, ScanActivity.class);
@@ -276,7 +283,7 @@ public class startactivity extends AppCompatActivity
     }
 
     private void launchmessage() {
-        Intent intent = new Intent(startactivity.this, messageAct.class);
+        Intent intent = new Intent(startactivity.this, msgtool.class);
         startActivity(intent);
     }
 
@@ -466,7 +473,8 @@ public class startactivity extends AppCompatActivity
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_SITES);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_RESTO);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_HOTEL);
-
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_MSG);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_FAVLS);
     }
     void createAddDatadb(String Title, String Adress,String Rat,String Desc){
        SQLiteDatabase myDB = this.openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
@@ -588,7 +596,7 @@ public class startactivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_gallery) {
             if (session.isLoggedIn()) {
-                Intent intent = new Intent(getApplicationContext(), ListeDesFavoris.class);
+                Intent intent = new Intent(getApplicationContext(), stinfos.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
             }else{
@@ -597,7 +605,7 @@ public class startactivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_slideshow) {
             if (session.isLoggedIn()) {
-                Intent intent = new Intent(getApplicationContext(), messageAct.class);
+                Intent intent = new Intent(getApplicationContext(), msgtool.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
             }else{

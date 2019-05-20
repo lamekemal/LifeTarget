@@ -27,6 +27,7 @@ import com.archeosbj.lifetarget.data.databaseContract;
 import com.archeosbj.lifetarget.data.favdb;
 import com.archeosbj.lifetarget.data.profdb;
 import com.archeosbj.lifetarget.httpTool.JSONParser;
+import com.archeosbj.lifetarget.httpTool.JSONStringParser;
 import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
 import com.archeosbj.lifetarget.loginandregistration.helper.SessionManager;
 import com.bumptech.glide.Glide;
@@ -35,6 +36,8 @@ import com.bumptech.glide.request.target.SizeReadyCallback;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.snatik.storage.Storage;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Response;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -59,6 +62,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import im.delight.android.webview.AdvancedWebView;
 
@@ -72,10 +77,12 @@ import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATA_DIRE
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FAV_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.FAV_LINK_URL;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.GET_MSG_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.HOTEL_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.HOTEL_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.INNOV_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.INNOV_LINK_URL;
+import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.MSG_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.PROFILS_JSON_CATEGORIES;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.PROFILS_LINK_URL;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.RESTO_JSON_CATEGORIES;
@@ -206,10 +213,15 @@ public class ZeroFragment extends Fragment{
     @Override
     public void onViewCreated(View v, Bundle savedInstanceState){
         super.onViewCreated(v, savedInstanceState);
-
         Log.e(TAG, "strting load");
-        new StartdbLoadFromNet().execute(RESTO_LINK_URL,HOTEL_LINK_URL,SITES_LINK_URL,
-                SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"",FAV_LINK_URL,PROFILS_LINK_URL);
+
+        ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
+        long period = 20; // the period between successive executions
+        exec.scheduleAtFixedRate(new MyTask(), 0, period, TimeUnit.SECONDS);
+
+
+        /*new StartdbLoadFromNet().execute(RESTO_LINK_URL,HOTEL_LINK_URL,SITES_LINK_URL,
+                SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"",FAV_LINK_URL,PROFILS_LINK_URL,GET_MSG_LINK_URL);*/
 
         //region DRAFT
         /*CookieSyncManager.createInstance(getActivity());
@@ -231,6 +243,14 @@ public class ZeroFragment extends Fragment{
         /}*/
         //endregion
 
+    }
+    class MyTask implements Runnable {
+
+        @Override
+        public void run() {
+            new StartdbLoadFromNet().execute(RESTO_LINK_URL,HOTEL_LINK_URL,SITES_LINK_URL,
+                    SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"",FAV_LINK_URL,PROFILS_LINK_URL,GET_MSG_LINK_URL);
+        }
     }
 
 
@@ -263,8 +283,11 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             try {
+                noDATAhelper(urldisplay,databaseContract.dataEntry.SQL_DELETE_ENTRIES_HOTEL,databaseContract.dataEntry.SQL_CREATE_ENTRIES_HOTEL
+                        ,databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
                 JSONArray feeds  = json.getJSONArray(HOTEL_JSON_CATEGORIES);
                 Log.e(TAG, "GetHotel Response from url (nbr): " + feeds.length());
                 int totalcc = 0;
@@ -407,8 +430,12 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             try {
+                noDATAhelper(urldisplay,databaseContract.dataEntry.SQL_DELETE_ENTRIES_RESTO,databaseContract.dataEntry.SQL_CREATE_ENTRIES_RESTO
+                ,databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO);
                 // Getting Array of Contacts
                 JSONArray feeds  = json.getJSONArray(RESTO_JSON_CATEGORIES);
 
@@ -507,7 +534,21 @@ public class ZeroFragment extends Fragment{
 
         }
     }
-
+    void noDATAhelper(String urldisplay, String TABLED, String TableC, String D){
+        TinyDB tinydb = new TinyDB(getContext());
+        try {
+            tinydb.remove(D);
+        }catch (Exception e){}
+        JSONStringParser jSParser = new JSONStringParser();
+        String del = "10001";
+        String jstring = jSParser.getJSONStringFromUrl(urldisplay);
+        if (del.equals(jstring)){
+            Log.e("JSTRING","jstring AS USE TO DELETE ");
+            SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+            myDB.execSQL(TABLED);
+            myDB.execSQL(TableC);
+        }
+    }
     private class GetSITES extends AsyncTask<String, Void, ArrayList<String>> {
 
         @Override
@@ -516,8 +557,11 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             try {
+                noDATAhelper(urldisplay,databaseContract.dataEntry.SQL_DELETE_ENTRIES_SITES,databaseContract.dataEntry.SQL_CREATE_ENTRIES_SITES
+                        , databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES);
                 // Getting Array of Contacts
                 JSONArray feeds  = json.getJSONArray(SITES_JSON_CATEGORIES);
 
@@ -635,10 +679,25 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             //ArrayList<Tour> feedList = new ArrayList<>();
             JSONParser jParser = new JSONParser();
+            JSONStringParser jSParser = new JSONStringParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
-            //Log.e(TAG, "Response from url: " + json.toString());
+            String del = "10001";
+            String jstring = jSParser.getJSONStringFromUrl(urldisplay);
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             try {
+                Log.e("JSTRING","jstring = " + jstring +"=="+ del);
+                if (del.equals(jstring)){
+                    TinyDB tinydb = new TinyDB(getContext());
+                    try {
+                        tinydb.remove(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI);
+                    }catch (Exception e){}
+
+                    Log.e("JSTRING","jstring AS USE TO DELETE ");
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_SERLI);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_SERLI);
+                }
                 // Getting Array of Contacts
                 JSONArray feeds  = json.getJSONArray(SERLI_JSON_CATEGORIES);
 
@@ -717,8 +776,8 @@ public class ZeroFragment extends Fragment{
                 e.printStackTrace();
             }catch(NullPointerException e)
             {
-                Log.e(TAG, "GET SERLI Response from url: " + cookies);
-                System.out.print("Caught NullPointerException");
+                Log.e(TAG, "NullPointerException : SERLI");
+
             }
 
             return mophs;
@@ -753,9 +812,13 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             //Log.e(TAG, "Response from url: " + json.toString());
             try {
+
+                noDATAhelper(urldisplay,databaseContract.dataEntry.SQL_DELETE_ENTRIES_TRANS,databaseContract.dataEntry.SQL_CREATE_ENTRIES_TRANS
+                ,databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
                 // Getting Array of Contacts
                 JSONArray feeds  = json.getJSONArray(TRANS_JSON_CATEGORIES);
                 //Log.e(TAG, "Response from url: " + feeds.length());
@@ -861,9 +924,12 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
             //Log.e(TAG, "Response from url: " + json.toString());
             try {
+                noDATAhelper(urldisplay,databaseContract.dataEntry.SQL_DELETE_ENTRIES_INNOV,databaseContract.dataEntry.SQL_CREATE_ENTRIES_INNOV
+                ,databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV);
                 // Getting Array of Contacts
                 JSONArray feeds  = json.getJSONArray(INNOV_JSON_CATEGORIES);
                 //Log.e(TAG, "Response from url: " + feeds.length());
@@ -974,8 +1040,9 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
-            Log.e("KEMAL","ENFANT AVEC  " + json.toString());
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
+            //Log.e("KEMAL","ENFANT AVEC  " + json.toString());
             try {
                 JSONArray feeds  = json.getJSONArray(FAV_JSON_CATEGORIES);
                 Log.e("KEMAL","ROW  " + feeds.length());
@@ -1016,6 +1083,57 @@ public class ZeroFragment extends Fragment{
 
         }
     }
+    private class GetMSG extends AsyncTask<String, Void, ArrayList<String>> {
+
+        @Override
+        protected ArrayList<String> doInBackground(String... params) {
+            String urldisplay = params[0];
+            ArrayList<String> mophs = new ArrayList<String>();
+            JSONParser jParser = new JSONParser();
+            String cookies = params[1];
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);
+            //Log.e("KEMAL","ENFANT AVEC  " + json.toString());
+            try {
+                JSONArray feeds  = json.getJSONArray(MSG_JSON_CATEGORIES);
+               // Log.e("KEMAL","ROW  " + feeds.length());
+                int m = 0;
+
+                while (m < feeds.length()) {
+                    JSONObject c = feeds.getJSONObject(m);
+                    // Storing each json item in variable
+                    String Id = c.optString("id");
+                    String formsg = c.optString("formsg");
+                    String ofmsg = c.optString("ofmsg");
+                    String msg = c.optString("msg");
+                    String onmsg = c.optString("onmsg");
+                    String created_at = c.optString("created_at");
+                    createAddDatadbMSG(formsg, ofmsg,msg,onmsg,created_at,  Id);
+                    m++;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }catch(NullPointerException e)
+            {
+            }
+            return mophs;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> result) {
+            Log.e("KEMAL","ENFANT FAV JAI FINIS ");
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.e("KEMAL","ENFANT FAV JAI COMMENCER ");
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+    }
 
     private class GetPROFS extends AsyncTask<String, Void, ArrayList<String>> {
 
@@ -1025,8 +1143,9 @@ public class ZeroFragment extends Fragment{
             ArrayList<String> mophs = new ArrayList<String>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
-            Log.e("KEMAL","ENFANT PROFILS IMG  " + json.toString());
+            JSONObject jsonX = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json =  urlToJsonObj(urldisplay);;
+            //Log.e("KEMAL","ENFANT PROFILS IMG  " + json.toString());
             try {
                 JSONArray feeds  = json.getJSONArray(PROFILS_JSON_CATEGORIES);
                 Log.e("KEMAL","ROW PROFILS " + feeds.length());
@@ -1498,6 +1617,26 @@ public class ZeroFragment extends Fragment{
         //}
     }
 
+    void createAddDatadbMSG(String fvuniqid, String byemail, String boolvar, String genre, String created_at, String Id)
+    {
+        Log.e("KEMAL db", "jai demarrer");
+        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_MSG);
+        ContentValues values = new ContentValues();
+        //values.put(databaseContract.dataEntry.hID,Id);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_formsg,fvuniqid);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_ofmsg,byemail);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_msg,boolvar);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_onmsg,genre);
+        values.put(databaseContract.dataEntry.COLUMN_NAME_created_at,created_at);
+        //long kid =myDB.insert(databaseContract.dataEntry.TABLE_NAME_FAV, null, values);
+        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_MSG, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        //if(kid == -1){
+        //    long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAV, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        //}else {
+        //}
+    }
+
     void createAddDatadbPROFS(String foremail, String imgvar, String Id)
     {
         SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
@@ -1570,6 +1709,7 @@ public class ZeroFragment extends Fragment{
                 new GetTRANS().execute(params[4],params[6]);
                 new GetINNOV().execute(params[5],params[6]);
                 new GetPROFS().execute(params[8],params[6]);
+                new GetMSG().execute(params[9],params[6]);
             } catch (InterruptedException  e) {
                 Toast.makeText(getContext(),"Erreur systeme",Toast.LENGTH_LONG);
             }
@@ -1620,6 +1760,31 @@ public class ZeroFragment extends Fragment{
         } else {
             return false;
         }
+    }
+
+   String urlToJson(String URl){
+       OkHttpClient client = new OkHttpClient();
+       com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+               .url(URl)
+               .get()
+               .addHeader("cache-control", "no-cache")
+               .addHeader("Postman-Token", "ab212bbb-1902-4c7b-b9d7-9c6cc2b798d7")
+               .build();
+        try {
+            Response response = client.newCall(request).execute();
+            return  response.body().string();
+        }catch (IOException e){
+            return null;
+        }
+    }
+    JSONObject urlToJsonObj(String URL){
+        String jsonStr = urlToJson(URL);
+        try {
+            Log.e("OKHTTP TOOLS","OKHTTP RESULT = " + jsonStr);
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            return jsonObj;
+        }catch (org.json.JSONException e){}
+        return null;
     }
 
     private void AddFavoriteInstant(String Title, String Adress,String Rat,String Desc,String Imurl,String Unic){

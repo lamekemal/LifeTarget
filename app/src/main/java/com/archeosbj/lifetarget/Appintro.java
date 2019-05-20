@@ -1,13 +1,10 @@
 package com.archeosbj.lifetarget;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
@@ -44,7 +41,7 @@ public class Appintro extends  AppIntro2 {
 
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle("Restaurant & Hotel");
-        sliderPage2.setDescription("Explorer les restaurant & hotel  comme si vous y étiez, obtenez des bons de reduction, des reservation et beaucoup plus...");
+        sliderPage2.setDescription("Explorer les restaurants & hotel  comme si vous y étiez, obtenez des bons de reduction, des reservations et beaucoup plus...");
         sliderPage2.setImageDrawable(R.drawable.rest_hot);
         sliderPage2.setTitleColor(getResources().getColor(R.color.Lavande));
         sliderPage2.setDescColor(getResources().getColor(R.color.Lavande));
@@ -53,7 +50,7 @@ public class Appintro extends  AppIntro2 {
 
         SliderPage sliderPage3 = new SliderPage();
         sliderPage3.setTitle("Tourisme & découverte");
-        sliderPage3.setDescription("Visiter à travers l'application ou en réel des lieux unique, LT vous accompagne en tout point");
+        sliderPage3.setDescription("Visiter à travers l'application des lieux unique, LT vous accompagne en tout point");
         sliderPage3.setImageDrawable(R.drawable.si_tran);
         sliderPage3.setTitleColor(getResources().getColor(R.color.Vert));
         sliderPage3.setDescColor(getResources().getColor(R.color.Vert));
@@ -64,7 +61,7 @@ public class Appintro extends  AppIntro2 {
         sliderPage4.setTitle("Chercher à apprendre plus?");
         sliderPage4.setTitleColor(getResources().getColor(R.color.white));
         sliderPage4.setDescColor(getResources().getColor(R.color.white));
-        sliderPage4.setDescription("Inscrivez vous à notre application et découvrez ses 56 fonctionnalités qui vont vous changez la vie");
+            sliderPage4.setDescription("Inscrivez vous à notre application et découvrez ses 56 fonctionnalités qui vont vous changez la vie");
         sliderPage4.setImageDrawable(R.drawable.icons_lt);
         sliderPage4.setBgColor(getResources().getColor(R.color.Bleu));
         addSlide(AppIntroFragment.newInstance(sliderPage4));

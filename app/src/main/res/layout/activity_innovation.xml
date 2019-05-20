@@ -45,6 +45,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabshar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:src="@drawable/ic_share_white"

@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -51,7 +52,7 @@ public class sitesTviewer extends AppCompatActivity {
     private boolean sendbycat;
     private ProgressDialog pDialog;
     private ProgressBar pBar;
-
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,14 @@ public class sitesTviewer extends AppCompatActivity {
             if(result.size()>2){
                 new loadData().execute(result);
             }
-            actSites();
+            new Runnable() {
+                @Override
+                public void run() {
+                    actSites();
+                    handler.postDelayed(this, 10000);
+                }
+            }.run();
+
         }else if(indexcat ==6){
             //Innov zone
             TinyDB tinydb = new TinyDB(getApplicationContext());
@@ -117,7 +125,13 @@ public class sitesTviewer extends AppCompatActivity {
             if(result.size()>2){
                 new loadData().execute(result);
             }
-            actInnov();
+            new Runnable() {
+                @Override
+                public void run() {
+                    actInnov();
+                    handler.postDelayed(this, 10000);
+                }
+            }.run();
         }
     }
     void actSites(){
@@ -158,6 +172,8 @@ public class sitesTviewer extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
             }
         });
+
+
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mLayoutManager);

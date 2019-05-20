@@ -21,13 +21,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".stinfos"></activity>
+        <activity
+            android:name=".msgtool"
+            android:label="Message"
+            android:theme="@style/LitleTheme" />
         <activity
             android:name=".profilpost"
-            android:label="@string/title_activity_profilpost"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="Votre Profils"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".serliview"
-            android:theme="@style/IntroFullScreen"></activity>
+            android:theme="@style/IntroFullScreen" />
         <activity android:name=".CodeDePartage" />
         <activity
             android:name=".CodePromos"
@@ -96,7 +101,7 @@
             android:theme="@style/IntroFullScreen" />
         <activity
             android:name=".Appintro"
-            android:label="LifeTarget (Alpha-Test)"
+            android:label="LifeTarget"
             android:theme="@style/IntroFullScreen" />
         <activity
             android:name=".MainActivity"
@@ -121,7 +126,7 @@
         <activity
             android:name=".startactivity"
             android:label="@string/title_activity_startactivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SearchableActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

@@ -118,7 +118,7 @@ public class MainActivity extends Activity {
 				intent.setAction(Intent.ACTION_GET_CONTENT);
 				startActivityForResult(Intent.createChooser(intent, "Selectionner une image de la galerie"), 1);
 
-				ImageUploadToServerFunction();
+
 			}
 		});
 
@@ -170,6 +170,7 @@ public class MainActivity extends Activity {
 			try {
 				bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 				accimg.setImageBitmap(bitmap);
+				ImageUploadToServerFunction(bitmap);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -177,10 +178,10 @@ public class MainActivity extends Activity {
 	}
 
 
-	public void ImageUploadToServerFunction(){
+	public void ImageUploadToServerFunction(Bitmap bp){
 		ByteArrayOutputStream byteArrayOutputStreamObject ;
 		byteArrayOutputStreamObject = new ByteArrayOutputStream();
-		bitmap.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStreamObject);
+		bp.compress(Bitmap.CompressFormat.JPEG, 20, byteArrayOutputStreamObject);
 		byte[] byteArrayVar = byteArrayOutputStreamObject.toByteArray();
 		final String ConvertImage = Base64.encodeToString(byteArrayVar, Base64.DEFAULT);
 		class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {

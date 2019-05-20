@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -59,7 +60,7 @@ public class categoriesView extends AppCompatActivity {
     private ProgressDialog pDialog;
     private ProgressBar pBar;
     private String categoriesString = "Life Target";
-
+    Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,7 +188,15 @@ public class categoriesView extends AppCompatActivity {
                 if(result.size()>2){
                   new  loadData().execute(result);
                 }
-                actResto();
+
+                 new Runnable() {
+                    @Override
+                    public void run() {
+                        actResto();
+                        Log.e("TEST DATA", "RESTO CHILDREN RUN");
+                        handler.postDelayed(this, 10000);
+                    }
+                }.run();
 
             }else if(indexcat ==2){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
@@ -195,7 +204,14 @@ public class categoriesView extends AppCompatActivity {
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-                actHotel();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        actHotel();
+                        handler.postDelayed(this, 10000);
+                    }
+                }.run();
+
             }else if(indexcat ==3){
                 //Toast.makeText(getApplicationContext(),String.valueOf(sendbycat),Toast.LENGTH_SHORT).show();
                 /*dbase = new database(getBaseContext());
@@ -225,14 +241,27 @@ public class categoriesView extends AppCompatActivity {
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-                actSerli();
+               new Runnable() {
+                    @Override
+                    public void run() {
+                        actSerli();
+                        handler.postDelayed(this, 10000);
+                    }
+                }.run();
+
             }else if(indexcat ==5){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-                actTrans();
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        actTrans();
+                        handler.postDelayed(this, 10000);
+                    }
+                }.run();
             }else if(indexcat ==6){
 
             }

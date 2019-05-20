@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -203,6 +204,17 @@ public class TourItmViewer extends AppCompatActivity {
         final MenuItem ctrdescription = menu.findItem(R.id.activity_main_alerts_menu_item);
 
         ctrdescription.setTitle(Extras);*/
+
+         Button btndec = (Button) hView.findViewById(R.id.buttondec);
+            btndec.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ListeDesFavoris.class);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
+                }
+            });
+
         nav_desc.setText(Extras);
         Storage storage = new Storage(contxent);
         String path = storage.getExternalStorageDirectory();

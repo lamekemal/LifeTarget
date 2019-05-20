@@ -51,8 +51,7 @@ public class msgAdapter extends RecyclerView.Adapter<MsgViewHolder> {
     public void onBindViewHolder(MsgViewHolder holder, final int position) {
         holder.providers.setText(Msg.get(position).getFormsg());
         holder.msg.setText(Msg.get(position).getMsg());
-       // holder.information.setText(Msg.get(position).getDescription());
-
+        //holder.information.setText(Msg.get(position).getDescription());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(Msg.get(position));
