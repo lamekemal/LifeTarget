@@ -350,6 +350,8 @@ public final class databaseContract {
                         databaseContract.dataEntry.COLUMN_NAME_boolvar + " TEXT," +
                         databaseContract.dataEntry.COLUMN_NAME_genre  + " TEXT," +
                         databaseContract.dataEntry.COLUMN_NAME_created_at + " TEXT)";
+        public static final String SQL_DELETE_ENTRIES_FAV =
+                "DROP TABLE IF EXISTS " + dataEntry.TABLE_NAME_FAV;
 
         public static final String CREATE_LOGIN_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"

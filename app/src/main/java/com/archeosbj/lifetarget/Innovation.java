@@ -84,7 +84,9 @@ public class Innovation extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, "Télécharge LifeTarget sur le PlayStore et découvre cette innovation unique : " + Innovname);
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Life Target");
+                intent.putExtra(Intent.EXTRA_TEXT, "\n Telecharge Life Target sur le PlayStore pour découvrir c'est innovation: " + Innovname);
+                startActivity(Intent.createChooser(intent,  "Partager par"));
             }
         });
 

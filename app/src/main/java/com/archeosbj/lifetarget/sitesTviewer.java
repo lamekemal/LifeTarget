@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -48,6 +49,7 @@ public class sitesTviewer extends AppCompatActivity {
     List<String> suggestList = new ArrayList<>();
     database dbase;
     private boolean stateSearch;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private int indexcat;
     private boolean sendbycat;
     private ProgressDialog pDialog;
@@ -110,13 +112,7 @@ public class sitesTviewer extends AppCompatActivity {
             if(result.size()>2){
                 new loadData().execute(result);
             }
-            new Runnable() {
-                @Override
-                public void run() {
-                    actSites();
-                    handler.postDelayed(this, 10000);
-                }
-            }.run();
+            actSites();
 
         }else if(indexcat ==6){
             //Innov zone
@@ -125,15 +121,63 @@ public class sitesTviewer extends AppCompatActivity {
             if(result.size()>2){
                 new loadData().execute(result);
             }
-            new Runnable() {
-                @Override
-                public void run() {
-                    actInnov();
-                    handler.postDelayed(this, 10000);
-                }
-            }.run();
+            actInnov();
         }
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
     }
+    void refreshItems() {
+        // Load items
+        // ...
+        if(indexcat ==3){
+            //SItes touristk
+            TinyDB tinydb = new TinyDB(getApplicationContext());
+            ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES);
+            if(result.size()>2){
+                new loadData().execute(result);
+            }
+            actSites();
+
+        }else if(indexcat ==6){
+            //Innov zone
+            TinyDB tinydb = new TinyDB(getApplicationContext());
+            ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV);
+            if(result.size()>2){
+                new loadData().execute(result);
+            }
+            actInnov();
+        }
+        // Load complete
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete() {
+        // Update the adapter and notify data set changed
+        // ...
+
+        // Stop refresh animation
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
     void actSites(){
         sitesdb obase = new sitesdb(this);
         TourAdapter xadapter = new TourAdapter(this,obase.getSites(),new TourAdapter.OnItemClickListener() {

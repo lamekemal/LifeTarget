@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -61,6 +62,8 @@ public class categoriesView extends AppCompatActivity {
     private ProgressBar pBar;
     private String categoriesString = "Life Target";
     Handler handler = new Handler();
+    SwipeRefreshLayout mSwipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +133,21 @@ public class categoriesView extends AppCompatActivity {
             }
         });
 
+        // SwipeRefreshLayout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,
+                android.R.color.holo_green_dark,
+                android.R.color.holo_orange_dark,
+                android.R.color.holo_blue_dark);
+
         //listner pour la recherche en générale sur la page de categorie ou de recherche avancer //important (sameListnercode)
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -179,8 +197,6 @@ public class categoriesView extends AppCompatActivity {
         });
 
         if (sendbycat == true){
-       // Toast.makeText(getApplicationContext(),"CATEGORISER",Toast.LENGTH_SHORT).show();
-            //CATEGORIE VIEW
             if(indexcat ==1){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO);
@@ -188,52 +204,15 @@ public class categoriesView extends AppCompatActivity {
                 if(result.size()>2){
                   new  loadData().execute(result);
                 }
-
-                 new Runnable() {
-                    @Override
-                    public void run() {
-                        actResto();
-                        Log.e("TEST DATA", "RESTO CHILDREN RUN");
-                        handler.postDelayed(this, 10000);
-                    }
-                }.run();
-
+                actResto();
             }else if(indexcat ==2){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        actHotel();
-                        handler.postDelayed(this, 10000);
-                    }
-                }.run();
-
+                actHotel();
             }else if(indexcat ==3){
-                //Toast.makeText(getApplicationContext(),String.valueOf(sendbycat),Toast.LENGTH_SHORT).show();
-                /*dbase = new database(getBaseContext());
-                adapter = new SearchAdapter(this,dbase.getLife(),new SearchAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Life item) {
-                    recomandCLIK(item);
-                        //on item click
-                        Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                        String[] itemstr = new String[12];
-                        //itemstr[0] = item.getId();
-                        itemstr[1] = item.getAdress();
-                        itemstr[2] = item.getDescription();
-                        itemstr[3] = item.getRating();
-                        itemstr[4] = item.getTitle();
-                        intent.putExtra("ITEM",itemstr);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-
-                    }
-                });
-                recyclerView.setAdapter(adapter);*/
 
             }else if(indexcat ==4){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
@@ -241,33 +220,69 @@ public class categoriesView extends AppCompatActivity {
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-               new Runnable() {
-                    @Override
-                    public void run() {
-                        actSerli();
-                        handler.postDelayed(this, 10000);
-                    }
-                }.run();
-
+                actSerli();
             }else if(indexcat ==5){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
                 if(result.size()>2){
                     new  loadData().execute(result);
                 }
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        actTrans();
-                        handler.postDelayed(this, 10000);
-                    }
-                }.run();
+                actTrans();
             }else if(indexcat ==6){
 
             }
         }
 
 
+    }
+
+    void refreshItems(){
+        // Load items
+        // ...
+        if (sendbycat == true){
+            if(indexcat ==1){
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO);
+                Log.e("TEST KEMAL", "whislen boot = " + result.size());
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actResto();
+            }else if(indexcat ==2){
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actHotel();
+            }else if(indexcat ==3){
+
+            }else if(indexcat ==4){
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actSerli();
+            }else if(indexcat ==5){
+                TinyDB tinydb = new TinyDB(getApplicationContext());
+                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
+                if(result.size()>2){
+                    new  loadData().execute(result);
+                }
+                actTrans();
+            }else if(indexcat ==6){
+
+            }
+        }
+        // Load complete
+        onItemsLoadComplete();
+    }
+
+    void onItemsLoadComplete(){
+        // Update the adapter and notify data set changed
+        // Stop refresh animation
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     void actResto(){

@@ -1047,7 +1047,10 @@ public class ZeroFragment extends Fragment{
                 JSONArray feeds  = json.getJSONArray(FAV_JSON_CATEGORIES);
                 Log.e("KEMAL","ROW  " + feeds.length());
                 int m = 0;
-
+                if(feeds.length()>1){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_FAV);
+                }
                 while (m < feeds.length()) {
                     JSONObject c = feeds.getJSONObject(m);
                     // Storing each json item in variable
@@ -1098,7 +1101,10 @@ public class ZeroFragment extends Fragment{
                 JSONArray feeds  = json.getJSONArray(MSG_JSON_CATEGORIES);
                // Log.e("KEMAL","ROW  " + feeds.length());
                 int m = 0;
-
+                if(feeds.length()>1){
+                    SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                    myDB.execSQL(databaseContract.dataEntry.SQL_DELETE_ENTRIES_MSG);
+                }
                 while (m < feeds.length()) {
                     JSONObject c = feeds.getJSONObject(m);
                     // Storing each json item in variable
@@ -1171,12 +1177,12 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             Log.e("KEMAL","ENFANT PROFILS JAI FINIS ");
-            profdb myprofils = new profdb(getContext());
-            SessionManager session = new SessionManager(getContext());
+            profdb myprofils = new profdb(getActivity().getApplicationContext());
+            SessionManager session = new SessionManager(getActivity().getApplicationContext());
             if (session.isLoggedIn()) {
                 Log.e("KEMAL","PREPARE DATABASE FOR PROFILS SAVE ");
                 SQLiteHandler db;
-                db = new SQLiteHandler(getContext());
+                db = new SQLiteHandler(getActivity().getApplicationContext());
                 HashMap<String, String> user = db.getUserDetails();
 
                 String name = user.get("name");
@@ -1185,10 +1191,10 @@ public class ZeroFragment extends Fragment{
                 if(melist.size() >0){
                   profm myUprofils = melist.get(0);
                   String imgn = myUprofils.getImgvar();
-                  TinyDB tiny = new TinyDB(getContext());
+                  TinyDB tiny = new TinyDB(getActivity().getApplicationContext());
                   tiny.putString(DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM,imgn);
                     final String filename = imgn;
-                    Storage storage = new Storage(getContext());
+                    Storage storage = new Storage(getActivity().getApplicationContext());
                     String path = storage.getExternalStorageDirectory();
                     String newDir = path + File.separator + DATA_DIRECTORI;
                     String newDiri = newDir + File.separator + "images";
@@ -1217,7 +1223,7 @@ public class ZeroFragment extends Fragment{
 
                                     @Override
                                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                        Storage storage = new Storage(getContext());
+                                        Storage storage = new Storage(getActivity().getApplicationContext());
                                         String path = storage.getExternalStorageDirectory();
                                         String newDir = path + File.separator + DATA_DIRECTORI;
                                         String newDiri = newDir + File.separator + "images";
@@ -1702,6 +1708,7 @@ public class ZeroFragment extends Fragment{
                 Thread.sleep(500);
                 Log.e("KEMAL","STARTUP " + params[6]);
                 new GetFAV().execute(params[7],params[6]);
+                Thread.sleep(50);
                 new GetRESTO().execute(params[0],params[6] );
                 new GetHotel().execute(params[1],params[6]);
                 new GetSITES().execute(params[2],params[6]);
@@ -1778,13 +1785,25 @@ public class ZeroFragment extends Fragment{
         }
     }
     JSONObject urlToJsonObj(String URL){
-        String jsonStr = urlToJson(URL);
-        try {
-            Log.e("OKHTTP TOOLS","OKHTTP RESULT = " + jsonStr);
-            JSONObject jsonObj = new JSONObject(jsonStr);
-            return jsonObj;
-        }catch (org.json.JSONException e){}
-        return null;
+        if (!URL.equals(null)){
+            String jsonStr = urlToJson(URL);
+            try {
+                Log.e("OKHTTP TOOLS","OKHTTP RESULT = " + jsonStr);
+                    if (!jsonStr.equals(null)){
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    return jsonObj;
+                }
+                return null;
+            }catch (org.json.JSONException e){
+                return null;
+            }catch(NullPointerException e)
+            {
+                return null;
+            }catch (Exception e ){
+                Log.e("OKHTTP TOOLS","ERREUR NON PRIS EN CHARGE : MSG = " + e.getMessage());
+                return null;
+            }
+        }else {return null;}
     }
 
     private void AddFavoriteInstant(String Title, String Adress,String Rat,String Desc,String Imurl,String Unic){

@@ -596,13 +596,15 @@ public class startactivity extends AppCompatActivity
             }
         } else if (id == R.id.nav_gallery) {
             if (session.isLoggedIn()) {
-                Intent intent = new Intent(getApplicationContext(), stinfos.class);
+                Intent intent = new Intent(getApplicationContext(), ListeDesFavoris.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
             }else{
                 Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
                         .setAction("Se connecter", null).show();
             }
+
+
         } else if (id == R.id.nav_slideshow) {
             if (session.isLoggedIn()) {
                 Intent intent = new Intent(getApplicationContext(), msgtool.class);
@@ -615,14 +617,19 @@ public class startactivity extends AppCompatActivity
         } else if (id == R.id.nav_manage) {
                 loginlogan();
         } else if (id == R.id.nav_share) {
-            if (session.isLoggedIn()) {
+            /*if (session.isLoggedIn()) {
                 Intent intent = new Intent(getApplicationContext(), CodeDePartage.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.fade_in_right, R.anim.fade_out_left);
             }else{
                 Snackbar.make(  getCurrentFocus(),"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
                         .setAction("Se connecter", null).show();
-            }
+            }*/
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Life Target");
+            intent.putExtra(Intent.EXTRA_TEXT, "\n Je te Recommande de télécharger cette appliction * http://sapandiwakar.in/w/*");
+            startActivity(Intent.createChooser(intent,  "Partager par"));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

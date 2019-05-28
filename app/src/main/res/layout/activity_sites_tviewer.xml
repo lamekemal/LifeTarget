@@ -46,6 +46,11 @@
         android:outlineSpotShadowColor="@color/magent"
         android:progress="50"
         android:visibility="gone"/>
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/load_prg">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -53,4 +58,5 @@
         android:clipToPadding="false"
         android:scrollbars="vertical"
         android:layout_below="@id/load_prg"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

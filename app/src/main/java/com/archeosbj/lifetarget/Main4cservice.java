@@ -50,6 +50,7 @@ public class Main4cservice extends AppCompatActivity {
                     String email = user.get("settings");
                     String ymsg = textmsg.getText().toString();
                     markpostfav("support@lifetargeteasy.com",email,ymsg, "CService");
+                    onBackPressed();
                 }else{
                     Snackbar.make( view,"Non disponible, veuillez vous connecter ", Snackbar.LENGTH_LONG)
                             .setAction("Se connecter", null).show();

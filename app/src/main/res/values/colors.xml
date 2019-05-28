@@ -11,6 +11,8 @@
     <color name="Noir" >#000000</color>
     <color name="Bleu" >#2092AD</color>
     <color name="Vert" >#499C54</color>
+    <color name="Tourism" >#F9F4CE</color>
+    <color name="TourismFont" >#261A11</color>
     <color name="Lavande" >#007ACC</color>
     <color name="LavandeG" >#2DCC70</color>
     <color name="Brun" >#FFA64D</color>
@@ -31,4 +33,5 @@
     <color name="btn_login_bg">#eceef1</color>
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
