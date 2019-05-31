@@ -35,28 +35,29 @@
         app:mt_placeholder="Taper pour rechercher"
         app:mt_hint="Recheche..."
         app:mt_searchBarColor="@color/colorPrimary"/>
-    <ProgressBar
-        android:layout_below="@id/search_zone"
-        android:id="@+id/load_prg"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="-2dp"
-        android:outlineSpotShadowColor="@color/magent"
-        android:progress="50"
-        android:visibility="gone"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/load_prg">
+        android:layout_below="@id/search_zone">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:scrollbars="vertical"
-        android:layout_below="@id/load_prg"/>
+        android:layout_below="@id/search_zone"/>
     </android.support.v4.widget.SwipeRefreshLayout>
+    <ProgressBar
+        android:id="@+id/load_prg"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginBottom="-5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:outlineSpotShadowColor="@color/magent"
+        android:indeterminate="true"
+        android:visibility="visible" />
 </RelativeLayout>

@@ -116,12 +116,13 @@ public class TransportActivity extends AppCompatActivity {
         CheckBox chkBox = (CheckBox) findViewById(R.id.chkBox);
         TextView pointfortjstrans = (TextView) findViewById(R.id.pointfortjstrans);
         CheckBox resevationtrans = (CheckBox) findViewById(R.id.resevationtrans);
+        TextView transpayement = (TextView) findViewById(R.id.transpayement);
 
         transcontact.setText(Contact);
         transportmail.setText(Mail);
         transportcap.setText(Maxcap);
         pointfortjstrans.setText(Pointfort);
-
+        transpayement.setText(Payement);
         if(Loanbus == "OUI"){
             chkBox.setChecked(true);
         }else if (Loanbus == " "){

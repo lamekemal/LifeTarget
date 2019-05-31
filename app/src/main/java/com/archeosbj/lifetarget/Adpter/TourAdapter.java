@@ -70,7 +70,9 @@ public class TourAdapter extends RecyclerView.Adapter<TourAdapter.MyViewHolder>{
 
         Bitmap bm = decodeSampledBitmapFromResource(fileph,180,180);
         holder.thumbnail.setImageBitmap(bm);
-
+        ///////////////////////////////////////////////////////////////////////////////////
+        holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //////////////////////////////////////////////////////////////////////////////////
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

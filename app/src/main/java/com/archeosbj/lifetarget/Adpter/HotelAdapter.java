@@ -69,7 +69,9 @@ public class HotelAdapter extends RecyclerView.Adapter<HotelViewHolder> {
         //hotelviwer.imageManupulate.setBitmapImageFormMomory(fileph,holder.thumbnail);
         Bitmap bm = decodeSampledBitmapFromResource(fileph,95,95);
         holder.thumbnail.setImageBitmap(bm);
-
+        ///////////////////////////////////////////////////////////////////////////////////
+        holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //////////////////////////////////////////////////////////////////////////////////
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(Hotel.get(position));

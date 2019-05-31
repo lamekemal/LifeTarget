@@ -72,6 +72,9 @@ public class InnovAdapter  extends RecyclerView.Adapter<InnovViewHolder> {
         String fileph = newDiri + File.separator + Hotel.get(position).getPrimpimage();
         //hotelviwer.imageManupulate.setBitmapImageFormMomory(fileph,holder.thumbnail);
         Bitmap bm = decodeSampledBitmapFromResource(fileph,95,95);
+        ///////////////////////////////////////////////////////////////////////////////////
+        holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //////////////////////////////////////////////////////////////////////////////////
         holder.thumbnail.setImageBitmap(bm);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

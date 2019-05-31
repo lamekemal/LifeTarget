@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.archeosbj.lifetarget.Adpter.feedAdapter;
 import com.archeosbj.lifetarget.Model.Actu;
 import com.archeosbj.lifetarget.data.database;
+import com.archeosbj.lifetarget.httpTool.HttpJSONParser;
 import com.archeosbj.lifetarget.httpTool.JSONParser;
 
 import org.json.JSONArray;
@@ -86,7 +87,8 @@ public class OneFragment extends Fragment {
             ArrayList<Actu> feedList = new ArrayList<>();
             JSONParser jParser = new JSONParser();
             String cookies = params[1];
-            JSONObject json = jParser.getJSONFromUrl(urldisplay);
+            JSONObject json = HttpJSONParser.ParseUrlToJSON(urldisplay);
+            JSONObject jsonc = jParser.getJSONFromUrl(urldisplay);
             try {
                 Log.e(TAG, "FEED REPONSE: " + json.toString());
                 JSONArray feeds  = json.getJSONArray(FEED_JSON_CATEGORIES);

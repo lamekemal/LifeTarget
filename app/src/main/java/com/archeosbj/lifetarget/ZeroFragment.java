@@ -953,7 +953,7 @@ public class ZeroFragment extends Fragment{
                     String name = c.optString("name");
                     String contact = c.optString("contact");
                     String service = c.optString("service");
-                    String description = c.optString("plusStr");
+                    String description = c.optString("description");
                     String video = c.optString("video");
                     String innovname = c.optString("innovname");
                     String bibliot = c.optString("bibliot");
@@ -1166,10 +1166,87 @@ public class ZeroFragment extends Fragment{
                     createAddDatadbPROFS(foremail, imgvar,Id);
                     m++;
                 }
+                //profils tool corrected
+                Thread.sleep(50);
+                    profdb myprofils = new profdb(getActivity().getApplicationContext());
+                    SessionManager session = new SessionManager(getActivity().getApplicationContext());
+                    if (session.isLoggedIn()) {
+                        Log.e("KEMAL","PREPARE DATABASE FOR PROFILS SAVE ");
+                        SQLiteHandler db;
+                        db = new SQLiteHandler(getActivity().getApplicationContext());
+                        HashMap<String, String> user = db.getUserDetails();
+
+                        String name = user.get("name");
+                        String email = user.get("settings");
+                        List<profm> melist = myprofils.getProfByMail(email);
+                        if(melist.size() >0){
+                            profm myUprofils = melist.get(0);
+                            String imgn = myUprofils.getImgvar();
+                            TinyDB tiny = new TinyDB(getActivity().getApplicationContext());
+                            tiny.putString(DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM,imgn);
+                            final String filename = imgn;
+                            Storage storage = new Storage(getActivity().getApplicationContext());
+                            String path = storage.getExternalStorageDirectory();
+                            String newDir = path + File.separator + DATA_DIRECTORI;
+                            String newDiri = newDir + File.separator + "images";
+                            storage.createDirectory(newDir);
+                            storage.createDirectory(newDiri);
+                            String fileph = newDiri + File.separator + filename;
+                            if(storage.isFileExist(fileph)){
+                                Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  imgn);
+                            }else {
+                                Glide.with(getActivity().getApplicationContext())
+                                        .asBitmap()
+                                        .load(SERVER_IMGURL_PROFILS +imgn)
+                                        .into(new Target<Bitmap>() {
+                                            @Override
+                                            public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
+                                            @Override
+                                            public void onStop() {}
+                                            @Override
+                                            public void onDestroy() {}
+                                            @Override
+                                            public void onLoadStarted(@Nullable Drawable placeholder) {}
+                                            @Override
+                                            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                                Log.d("GlideMar", "marker onLoadFailed");
+                                            }
+
+                                            @Override
+                                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                                Storage storage = new Storage(getActivity().getApplicationContext());
+                                                String path = storage.getExternalStorageDirectory();
+                                                String newDir = path + File.separator + DATA_DIRECTORI;
+                                                String newDiri = newDir + File.separator + "images";
+                                                storage.createDirectory(newDir);
+                                                storage.createDirectory(newDiri);
+                                                String fileph = newDiri + File.separator + filename;
+                                                try {
+                                                    storage.createFile(fileph, resource);
+                                                }catch (Exception e){}
+
+                                            }
+                                            @Override
+                                            public void onLoadCleared(@Nullable Drawable placeholder) {}
+                                            @Override
+                                            public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
+                                            @Override
+                                            public void removeCallback(@NonNull SizeReadyCallback cb) {}
+                                            @Override
+                                            public void setRequest(@Nullable Request request) { }
+                                            @Nullable
+                                            @Override
+                                            public Request getRequest() {return null; }
+                                        });
+                            }
+                        }
+                    }
             } catch (JSONException e) {
                 e.printStackTrace();
             }catch(NullPointerException e)
             {
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
             return mophs;
         }
@@ -1177,79 +1254,7 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             Log.e("KEMAL","ENFANT PROFILS JAI FINIS ");
-            profdb myprofils = new profdb(getActivity().getApplicationContext());
-            SessionManager session = new SessionManager(getActivity().getApplicationContext());
-            if (session.isLoggedIn()) {
-                Log.e("KEMAL","PREPARE DATABASE FOR PROFILS SAVE ");
-                SQLiteHandler db;
-                db = new SQLiteHandler(getActivity().getApplicationContext());
-                HashMap<String, String> user = db.getUserDetails();
 
-                String name = user.get("name");
-                String email = user.get("settings");
-                List<profm> melist = myprofils.getProfByMail(email);
-                if(melist.size() >0){
-                  profm myUprofils = melist.get(0);
-                  String imgn = myUprofils.getImgvar();
-                  TinyDB tiny = new TinyDB(getActivity().getApplicationContext());
-                  tiny.putString(DEFAULT_PREFS_SETTINGS_KEY_PROFILS_NM,imgn);
-                    final String filename = imgn;
-                    Storage storage = new Storage(getActivity().getApplicationContext());
-                    String path = storage.getExternalStorageDirectory();
-                    String newDir = path + File.separator + DATA_DIRECTORI;
-                    String newDiri = newDir + File.separator + "images";
-                    storage.createDirectory(newDir);
-                    storage.createDirectory(newDiri);
-                    String fileph = newDiri + File.separator + filename;
-                    if(storage.isFileExist(fileph)){
-                        Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  imgn);
-                    }else {
-                        Glide.with(getActivity().getApplicationContext())
-                                .asBitmap()
-                                .load(SERVER_IMGURL_PROFILS +imgn)
-                                .into(new Target<Bitmap>() {
-                                    @Override
-                                    public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
-                                    @Override
-                                    public void onStop() {}
-                                    @Override
-                                    public void onDestroy() {}
-                                    @Override
-                                    public void onLoadStarted(@Nullable Drawable placeholder) {}
-                                    @Override
-                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                        Log.d("GlideMar", "marker onLoadFailed");
-                                    }
-
-                                    @Override
-                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                        Storage storage = new Storage(getActivity().getApplicationContext());
-                                        String path = storage.getExternalStorageDirectory();
-                                        String newDir = path + File.separator + DATA_DIRECTORI;
-                                        String newDiri = newDir + File.separator + "images";
-                                        storage.createDirectory(newDir);
-                                        storage.createDirectory(newDiri);
-                                        String fileph = newDiri + File.separator + filename;
-                                        try {
-                                            storage.createFile(fileph, resource);
-                                        }catch (Exception e){}
-
-                                    }
-                                    @Override
-                                    public void onLoadCleared(@Nullable Drawable placeholder) {}
-                                    @Override
-                                    public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
-                                    @Override
-                                    public void removeCallback(@NonNull SizeReadyCallback cb) {}
-                                    @Override
-                                    public void setRequest(@Nullable Request request) { }
-                                    @Nullable
-                                    @Override
-                                    public Request getRequest() {return null; }
-                                });
-                    }
-                }
-            }
         }
 
         @Override
@@ -1281,67 +1286,74 @@ public class ZeroFragment extends Fragment{
         @Override
         protected Void doInBackground(ArrayList<String>... params) {
             Log.e("KEMAL STORAGE", "RECIEVED FOR DOWNLOAD FILE BY GLIDE");
-            for(int i = 0; i < params[0].size(); i++)
-            {
-                final String filename = params[0].get(i);
-                Storage storage = new Storage(getContext());
-                String path = storage.getExternalStorageDirectory();
-                String newDir = path + File.separator + DATA_DIRECTORI;
-                String newDiri = newDir + File.separator + "images";
-                storage.createDirectory(newDir);
-                storage.createDirectory(newDiri);
-                String fileph = newDiri + File.separator + filename;
-                if(storage.isFileExist(fileph)){
-                    Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  params[0].get(i));
-                }else {
-                    Log.e("DOWNLOAD TASK",SERVER_IMGURL_API + params[0].get(i) + " T" +  params[0].get(i));
-                    Glide.with(getActivity().getApplicationContext())
-                            .asBitmap()
-                            .load(SERVER_IMGURL_API + params[0].get(i))
-                            .into(new Target<Bitmap>() {
-                                @Override
-                                public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
-                                @Override
-                                public void onStop() {}
-                                @Override
-                                public void onDestroy() {}
-                                @Override
-                                public void onLoadStarted(@Nullable Drawable placeholder) {}
-                                @Override
-                                public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                                    Log.d("GlideMar", "marker onLoadFailed");
-                                }
+            try{
+                for(int i = 0; i < params[0].size(); i++)
+                {
+                    final String filename = params[0].get(i);
+                    Storage storage = new Storage(getContext());
+                    String path = storage.getExternalStorageDirectory();
+                    String newDir = path + File.separator + DATA_DIRECTORI;
+                    String newDiri = newDir + File.separator + "images";
+                    storage.createDirectory(newDir);
+                    storage.createDirectory(newDiri);
+                    String fileph = newDiri + File.separator + filename;
+                    if(storage.isFileExist(fileph)){
+                        Log.e("DOWNLOAD TASK","FICHIER EXISTE DEJA --- " +  params[0].get(i));
+                    }else {
+                        Log.e("DOWNLOAD TASK",SERVER_IMGURL_API + params[0].get(i) + " T" +  params[0].get(i));
+                        Glide.with(getActivity().getApplicationContext())
+                                .asBitmap()
+                                .load(SERVER_IMGURL_API + params[0].get(i))
+                                .into(new Target<Bitmap>() {
+                                    @Override
+                                    public void onStart() {Log.e("KEMAL STORAGE", "READY TO VAR DOWN = "+ filename);}
+                                    @Override
+                                    public void onStop() {}
+                                    @Override
+                                    public void onDestroy() {}
+                                    @Override
+                                    public void onLoadStarted(@Nullable Drawable placeholder) {}
+                                    @Override
+                                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                                        Log.d("GlideMar", "marker onLoadFailed");
+                                    }
 
-                                @Override
-                                public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-                                    Storage storage = new Storage(getContext());
-                                    String path = storage.getExternalStorageDirectory();
-                                    String newDir = path + File.separator + DATA_DIRECTORI;
-                                    String newDiri = newDir + File.separator + "images";
-                                    storage.createDirectory(newDir);
-                                    storage.createDirectory(newDiri);
-                                    String fileph = newDiri + File.separator + filename;
-                                    try {
-                                        storage.createFile(fileph, resource);
-                                    }catch (Exception e){}
+                                    @Override
+                                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                                        Storage storage = new Storage(getContext());
+                                        String path = storage.getExternalStorageDirectory();
+                                        String newDir = path + File.separator + DATA_DIRECTORI;
+                                        String newDiri = newDir + File.separator + "images";
+                                        storage.createDirectory(newDir);
+                                        storage.createDirectory(newDiri);
+                                        String fileph = newDiri + File.separator + filename;
+                                        try {
+                                            storage.createFile(fileph, resource);
+                                        }catch (Exception e){
+                                            e.printStackTrace();
+                                        }
 
-                                }
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {}
-                                @Override
-                                public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
-                                @Override
-                                public void removeCallback(@NonNull SizeReadyCallback cb) {}
-                                @Override
-                                public void setRequest(@Nullable Request request) { }
-                                @Nullable
-                                @Override
-                                public Request getRequest() {return null; }
-                            });
-
-                }
-            } return null;}
+                                    }
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {}
+                                    @Override
+                                    public void getSize(@NonNull SizeReadyCallback cb) {cb.onSizeReady(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL);}
+                                    @Override
+                                    public void removeCallback(@NonNull SizeReadyCallback cb) {}
+                                    @Override
+                                    public void setRequest(@Nullable Request request) { }
+                                    @Nullable
+                                    @Override
+                                    public Request getRequest() {return null; }
+                                });
+                    }
+                } return null;
+            }catch(OutOfMemoryError e){
+                e.printStackTrace();
+                return null;
+            }
         }
+    }
 
     void createAddDatadb(String Title, String Adress,String Rat,String Desc){
         SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
@@ -1651,7 +1663,7 @@ public class ZeroFragment extends Fragment{
         //values.put(databaseContract.dataEntry.hID,Id);
         values.put(databaseContract.dataEntry.COLUMN_NAME_foremail,foremail);
         values.put(databaseContract.dataEntry.COLUMN_NAME_imgvar,imgvar);
-        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_FAV, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_PROFILS, null, values,SQLiteDatabase.CONFLICT_REPLACE);
     }
     private class DownloadTask extends AsyncTask<String,Void, Bitmap>{
         protected void onPreExecute(){}
@@ -1770,19 +1782,24 @@ public class ZeroFragment extends Fragment{
     }
 
    String urlToJson(String URl){
-       OkHttpClient client = new OkHttpClient();
-       com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
-               .url(URl)
-               .get()
-               .addHeader("cache-control", "no-cache")
-               .addHeader("Postman-Token", "ab212bbb-1902-4c7b-b9d7-9c6cc2b798d7")
-               .build();
         try {
-            Response response = client.newCall(request).execute();
-            return  response.body().string();
-        }catch (IOException e){
+            OkHttpClient client = new OkHttpClient();
+            com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                    .url(URl)
+                    .get()
+                    .addHeader("cache-control", "no-cache")
+                    .addHeader("Postman-Token", "ab212bbb-1902-4c7b-b9d7-9c6cc2b798d7")
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return  response.body().string();
+            }catch (IOException e){
+                return null;
+            }
+        }catch (NullPointerException e){
             return null;
         }
+
     }
     JSONObject urlToJsonObj(String URL){
         if (!URL.equals(null)){
@@ -1805,7 +1822,6 @@ public class ZeroFragment extends Fragment{
             }
         }else {return null;}
     }
-
     private void AddFavoriteInstant(String Title, String Adress,String Rat,String Desc,String Imurl,String Unic){
         SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_PROFILS);

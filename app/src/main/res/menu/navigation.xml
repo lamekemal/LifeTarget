@@ -15,7 +15,7 @@
         android:title="Informations" />
     <item
         android:id="@+id/navigation_pfort"
-        android:icon="@drawable/baseline_thumb_up_alt_black_18dp"
+        android:icon="@drawable/ic_add_circle_outline_black_24dp"
         android:title="Points Forts" />
     <item
         android:id="@+id/navigation_pfailble"

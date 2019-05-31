@@ -67,7 +67,9 @@ public class RestoAdapter extends RecyclerView.Adapter<RestoViewHolder> {
         String fileph = newDiri + File.separator + Resto.get(position).getPrinpimage();
         Bitmap bm = BitmapFactory.decodeFile(fileph);
         holder.thumbnail.setImageBitmap(bm);
-
+        ///////////////////////////////////////////////////////////////////////////////////
+        holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //////////////////////////////////////////////////////////////////////////////////
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(Resto.get(position));

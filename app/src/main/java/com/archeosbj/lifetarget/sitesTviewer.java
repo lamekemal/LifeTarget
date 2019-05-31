@@ -7,6 +7,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -75,7 +76,6 @@ public class sitesTviewer extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(true);
         pBar = (ProgressBar)  findViewById(R.id.load_prg);
-        pBar.setMax(100);
 
         ImageView imagelite = (ImageView) findViewById(R.id.indicator_search);
         imagelite.setOnClickListener(new View.OnClickListener(){
@@ -271,30 +271,31 @@ public class sitesTviewer extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(ArrayList<String>... params) {
-            int whis =0;
-            int whiset = 0;
-            int whislen = params[0].size();
-            while (whis < whislen)
-            {
-                final String filename = params[0].get(whis);
-                Storage storage = new Storage(getApplicationContext());
-                String path = storage.getExternalStorageDirectory();
-                String newDir = path + File.separator + DATA_DIRECTORI;
-                String newDiri = newDir + File.separator + "images";
-                storage.createDirectory(newDir);
-                storage.createDirectory(newDiri);
-                String fileph = newDiri + File.separator + filename;
-                if(storage.isFileExist(fileph)){
-                    whiset=whiset + 1;
-                } else {
-                    whiset= whiset+0;
+               // Thread.sleep(500);
+                int whis =0;
+                int whiset = 0;
+                int whislen = params[0].size();
+                while (whis < whislen)
+                {
+                    final String filename = params[0].get(whis);
+                    Storage storage = new Storage(getApplicationContext());
+                    String path = storage.getExternalStorageDirectory();
+                    String newDir = path + File.separator + DATA_DIRECTORI;
+                    String newDiri = newDir + File.separator + "images";
+                    storage.createDirectory(newDir);
+                    storage.createDirectory(newDiri);
+                    String fileph = newDiri + File.separator + filename;
+                    if(storage.isFileExist(fileph)){
+                        whiset=whiset + 1;
+                    } else {
+                        whiset= whiset+0;
+                    }
+
+                    whis = whis + 1;
+
+                    int prg = Math.round ((whiset * 100)/whislen);
+                    publishProgress(prg);
                 }
-
-                whis = whis + 1;
-
-                int prg = Math.round ((whiset * 100)/whislen);
-                publishProgress(prg);
-            }
             return true;
         }
 
@@ -302,8 +303,12 @@ public class sitesTviewer extends AppCompatActivity {
         public void onPreExecute()
         {
             pDialog.setMessage("Telechargement ...");
-            showDialog();
-            pBar.setVisibility(View.VISIBLE);
+            try {
+                showDialog();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //pBar.setVisibility(View.VISIBLE);
         }
 
 
@@ -327,6 +332,9 @@ public class sitesTviewer extends AppCompatActivity {
         @Override
         public void onProgressUpdate(Integer... params)
         {
+            //Log.e("TEST KEMAL", "whislen PROGRESSION PERCENT = " + params[0]);
+            pBar.setIndeterminate(false);
+            pBar.setMax(100);
             pBar.setProgress(params[0]);
             // show in spinner, access UI elements
         }
@@ -376,9 +384,12 @@ public class sitesTviewer extends AppCompatActivity {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+    private void showDialog() throws InterruptedException {
+        Thread.sleep(500);
+        Snackbar.make(findViewById(android.R.id.content), "Chargement des images", Snackbar.LENGTH_LONG)
+                .setAction("",null).show();
+       /*if (!pDialog.isShowing())
+            pDialog.show();*/
     }
 
     private void hideDialog() {

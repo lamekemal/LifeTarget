@@ -98,9 +98,9 @@ public class Innovation extends AppCompatActivity {
         imageList.add(1,myIMGUri(GaleryOne));
         imageList.add(2,myIMGUri(Galerytwo));
         imageList.add(3,myIMGUri(Galerytree));
-        imageList.add(4,myIMGUri(Galeryfour));
+        /*imageList.add(4,myIMGUri(Galeryfour));
         imageList.add(5,myIMGUri(Galeryfive));
-        imageList.add(6,myIMGUri(Galerysix));
+        imageList.add(6,myIMGUri(Galerysix));*/
         Storage storage = new Storage(this);
         String path = storage.getExternalStorageDirectory();
         String newDir = path + File.separator + DATA_DIRECTORI;
@@ -109,6 +109,15 @@ public class Innovation extends AppCompatActivity {
         setBitmapImageFormSD(fileph,imagePrm);
 
         TextView textInnovDesc = (TextView) findViewById(R.id.textInnovDesc);
+
+        TextView textInnovMail = (TextView) findViewById(R.id.textInnovMail);
+        TextView textInnovCtn = (TextView) findViewById(R.id.textInnovCnt);
+        TextView textInnovVideo = (TextView) findViewById(R.id.textInnovVideo);
+
+        textInnovVideo.setText(Video);
+        textInnovCtn.setText(Contact);
+        textInnovMail.setText(Mail);
+
         TextView innoCreate = (TextView) findViewById(R.id.innoCreate);
         TextView societyText = (TextView) findViewById(R.id.societyText);
         TextView innoHistor = (TextView) findViewById(R.id.innoHistor);

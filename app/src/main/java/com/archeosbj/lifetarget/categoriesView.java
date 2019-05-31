@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -77,8 +78,9 @@ public class categoriesView extends AppCompatActivity {
 
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(true);
+        //pDialog.vi
         pBar = (ProgressBar)  findViewById(R.id.load_prg);
-        pBar.setMax(100);
+
 
         sendbycat = intent.getIntExtra(CATEGORIES_SENDER,2) ==1;
         indexcat = intent.getIntExtra(CATEGORIES_INDEX,9);
@@ -449,14 +451,18 @@ public class categoriesView extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
     }
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
+
+    private void showDialog() throws InterruptedException {
+        Thread.sleep(500);
+        Snackbar.make(findViewById(android.R.id.content), "Chargement des images", Snackbar.LENGTH_LONG)
+                .setAction("",null).show();
+       /*if (!pDialog.isShowing())
+            pDialog.show();*/
     }
 
     private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+       /* if (pDialog.isShowing())
+            pDialog.dismiss();*/
     }
 
     private class loadData extends AsyncTask<ArrayList<String>,Integer,Boolean> {
@@ -494,9 +500,13 @@ public class categoriesView extends AppCompatActivity {
             @Override
             public void onPreExecute()
             {
-                pDialog.setMessage("Telechargement ...");
-                showDialog();
-                pBar.setVisibility(View.VISIBLE);
+                pDialog.setMessage("Telechargement des images...");
+                try {
+                    showDialog();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //pBar.setVisibility(View.VISIBLE);
             }
 
 
@@ -525,7 +535,9 @@ public class categoriesView extends AppCompatActivity {
             @Override
             public void onProgressUpdate(Integer... params)
             {
-                 pBar.setProgress(params[0]);
+                pBar.setIndeterminate(false);
+                pBar.setMax(100);
+                pBar.setProgress(params[0]);
                 // show in spinner, access UI elements
             }
 

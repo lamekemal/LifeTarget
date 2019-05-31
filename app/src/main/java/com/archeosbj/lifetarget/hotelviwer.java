@@ -93,6 +93,7 @@ public class hotelviwer extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         contxent = this;
+        //bug sur la ligne 96, out fo memory;
         setContentView(R.layout.activity_hotelviwer);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

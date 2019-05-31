@@ -188,7 +188,7 @@ public class MainActivity extends Activity {
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
-				progressDialog = ProgressDialog.show(MainActivity.this,"Chargement de l'image","Patienter",false,false);
+				progressDialog = ProgressDialog.show(MainActivity.this,"Chargement de l'image","Patienter",false,true);
 			}
 			@Override
 			protected void onPostExecute(String string1) {
