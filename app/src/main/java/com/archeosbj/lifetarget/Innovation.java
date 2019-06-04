@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.archeosbj.lifetarget.Adpter.InnovImageAdapter;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.bumptech.glide.Glide;
 import com.snatik.storage.Storage;
 
@@ -55,7 +56,10 @@ public class Innovation extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         Intent intent = getIntent();
-        String[] RestoItm = intent.getStringArrayExtra("ITEM");
+        final String Tcken = intent.getStringExtra("ITEM");
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        final String[] RestoItm =tinydb.getArryString(Tcken);
+        tinydb.remove(Tcken);
         Id = RestoItm[1];
         Name = RestoItm[2] ;
         Contact = RestoItm[3] ;

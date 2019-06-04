@@ -14,7 +14,6 @@ import java.util.List;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_NAME;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_VERSION;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_INNOV;
-import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_TRANS;
 
 public class innovdb  extends SQLiteAssetHelper {
 
@@ -84,17 +83,17 @@ public class innovdb  extends SQLiteAssetHelper {
         return result;
     }
 
-    public List<Innov> getInnovByNames(String title){
+    public List<Innov> getInnovByNames(String name){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String[] sqlSelect={"id","uniqueid", "name", "contact", "service", "description",
                 "innovname", "video", "bibliot", "stectn", "historq", "mail",
                 "primpimage", "galeryOne", "galerytwo", "galerytree", "galeryfour",
                 "galeryfive", "galerysix","reservetwo","modified"};
-        String tablename = TABLE_NAME_TRANS;
+        String tablename = TABLE_NAME_INNOV;
         qb.setTables(tablename);
 
-        Cursor cursor = qb.query(db,sqlSelect,"Title LIKE ?",new String[]{"%"+title+"%"},null,null,null);
+        Cursor cursor = qb.query(db,sqlSelect,"innovname LIKE ?",new String[]{"%"+name+"%"},null,null,null);
         List<Innov> result = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{

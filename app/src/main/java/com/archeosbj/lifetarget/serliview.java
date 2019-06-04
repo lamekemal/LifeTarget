@@ -16,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.archeosbj.lifetarget.data.databaseContract;
 import com.archeosbj.lifetarget.loginandregistration.app.AppController;
 import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
@@ -66,7 +67,10 @@ public class serliview extends AppCompatActivity {
         setContentView(R.layout.activity_serliview);
 
         Intent intent = getIntent();
-        String[] HotelItm = intent.getStringArrayExtra("ITEM");
+        final String Tcken = intent.getStringExtra("ITEM");
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        final String[] HotelItm =tinydb.getArryString(Tcken);
+        tinydb.remove(Tcken);
 
         Id = HotelItm[1];
         Name = HotelItm[2];

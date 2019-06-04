@@ -27,6 +27,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.archeosbj.lifetarget.data.databaseContract;
 import com.archeosbj.lifetarget.loginandregistration.app.AppController;
 import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
@@ -92,9 +93,15 @@ public class hotelviwer extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        contxent = this;
         //bug sur la ligne 96, out fo memory;
         setContentView(R.layout.activity_hotelviwer);
+        //Bridge.restoreInstanceState(this, savedInstanceState);
+        contxent = this;
+        /*if (savedInstanceState != null) {
+            Bridge.restoreInstanceState(this, savedInstanceState);
+        }*/
+
+
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -109,7 +116,10 @@ public class hotelviwer extends AppCompatActivity{
         pfaibleview = (RelativeLayout) findViewById(R.id.point_faible_view);
 
         Intent intent = getIntent();
-        String[] RestoItm = intent.getStringArrayExtra("ITEM");
+        final String Tcken = intent.getStringExtra("ITEM");
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        final String[] RestoItm =tinydb.getArryString(Tcken);
+        tinydb.remove(Tcken);
 
         genre = RestoItm[0];
         Id = RestoItm[1];
@@ -615,4 +625,12 @@ public class hotelviwer extends AppCompatActivity{
             return false;
         }
     };
+
+    /*@Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Bridge.saveInstanceState(this, outState);
+    /*}*/
+
+
 }

@@ -300,6 +300,15 @@ public class TinyDB {
     }
 
     /**
+     * Get parsed ArryTable of String from SharedPreferences at 'key'
+     * @param key SharedPreferences key
+     * @return ArrayList of String
+     */
+    public String[] getArryString(String key) {
+        return TextUtils.split(preferences.getString(key, ""), "‚‗‚");
+    }
+
+    /**
      * Get boolean value from SharedPreferences at 'key'. If key not found, return 'defaultValue'
      * @param key SharedPreferences key
      * @param defaultValue boolean value returned if key was not found
@@ -449,6 +458,17 @@ public class TinyDB {
     	checkForNullKey(key);
         String[] myStringList = stringList.toArray(new String[stringList.size()]);
         preferences.edit().putString(key, TextUtils.join("‚‗‚", myStringList)).apply();
+    }
+
+    /**
+     * Build ByKemalDARA
+     * Put ArrayTable of String into SharedPreferences with 'key' and save
+     * @param key SharedPreferences key
+     * @param stringList ArrayTable of String to be added
+     */
+    public void putArryString(String key, String[] stringList) {
+        checkForNullKey(key);
+        preferences.edit().putString(key, TextUtils.join("‚‗‚", stringList)).apply();
     }
 
     /**

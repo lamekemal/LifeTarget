@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
-import com.archeosbj.lifetarget.Model.Serli;
 import com.archeosbj.lifetarget.Model.Trans;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
@@ -14,7 +13,6 @@ import java.util.List;
 
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_NAME;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_VERSION;
-import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_SERLI;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_TRANS;
 
 public class transdb extends SQLiteAssetHelper {
@@ -91,14 +89,14 @@ public class transdb extends SQLiteAssetHelper {
     public List<Trans> getTransByNames(String title){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String[] sqlSelect={"id", "uniqueid", "name", "contact", "service", "mail", "horaire", "price",
-                "pointfort", "extras", "localisation", "more", "primpimage", "galeryOne",
-                "galerytwo","galerytree", "galeryfour", "galeryfive", "galerysix",
-                "galeryseven", "reserveone", "reservetwo", "plusStr", "modified"};
+        String[] sqlSelect={"id","uniqueid", "name", "contact", "service", "description",
+                "horaire", "price", "pointfort", "extras", "mail",
+                "payement", "primpimage", "galeryOne", "galerytwo", "galerytree",
+                "loanbus", "transline", "reserveone", "reservetwo", "maxcap", "modified"};
         String tablename = TABLE_NAME_TRANS;
         qb.setTables(tablename);
 
-        Cursor cursor = qb.query(db,sqlSelect,"Title LIKE ?",new String[]{"%"+title+"%"},null,null,null);
+        Cursor cursor = qb.query(db,sqlSelect,"name LIKE ?",new String[]{"%"+title+"%"},null,null,null);
         List<Trans> result = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{

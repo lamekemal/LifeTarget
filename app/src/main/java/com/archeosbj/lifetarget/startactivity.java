@@ -110,7 +110,7 @@ public class startactivity extends AppCompatActivity
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         dbase = new database(this);
         materialSearchBar.inflateMenu(R.menu.startactivity);
-        materialSearchBar.setText("Recherche");
+        materialSearchBar.setHint("Recherche");
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         personaladapter = new SearchAdapters(inflater);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -122,9 +122,10 @@ public class startactivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         //Option 1
-        personaladapter.setSuggestions(dbase.getLife());
-        materialSearchBar.setCardViewElevation(10);
-        //=================================<< IMPORTANT POUR ACTIVER LA RECHERCHE >> materialSearchBar.setCustomSuggestionAdapter(personaladapter);
+        //personaladapter.setSuggestions(dbase.getLife());
+        materialSearchBar.setCardViewElevation(1);
+        //=================================<< IMPORTANT POUR ACTIVER LA RECHERCHE >>
+        //materialSearchBar.setCustomSuggestionAdapter(personaladapter);
        // Log.i("KEMAL",String.valueOf(personaladapter.getSuggestions().get(1).getAdress()));
 
         View hView =  navigationView.getHeaderView(0);

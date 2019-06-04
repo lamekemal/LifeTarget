@@ -5,7 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="tab_text_1">Services</string>
-    <string name="tab_text_2">File d\'Actualité</string>
+    <string name="tab_text_2">Actualités</string>
     <string name="tab_text_3">Compte</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>

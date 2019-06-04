@@ -1,6 +1,7 @@
 package com.archeosbj.lifetarget;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -15,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.CookieManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -161,14 +161,7 @@ public class ZeroFragment extends Fragment{
                 LaunchScdIntentWithCat(getString(R.string.innov_text_categories),6);
             }
         });
-        CookieManager.getInstance().removeAllCookie();
-
-        /*mWebView = (AdvancedWebView) v.findViewById(R.id.awebview);
-        /mWebView.loadUrl(BLANK_COOKIES_URL);
-        /mWebView.setThirdPartyCookiesEnabled(true);
-        /mWebView.setCookiesEnabled(true);
-        /mWebView.setDesktopMode(true);*/
-        return v;
+       return v;
     }
 
         //region DRAFT
@@ -244,6 +237,7 @@ public class ZeroFragment extends Fragment{
         //endregion
 
     }
+
     class MyTask implements Runnable {
 
         @Override
@@ -252,7 +246,6 @@ public class ZeroFragment extends Fragment{
                     SERLI_LINK_URL,TRANS_LINK_URL,INNOV_LINK_URL,"",FAV_LINK_URL,PROFILS_LINK_URL,GET_MSG_LINK_URL);
         }
     }
-
 
     private void LaunchIntentWithCat(String s, Integer i) {
         Intent intent = new Intent(getContext(), categoriesView.class);
@@ -367,9 +360,16 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String>  result) {
             if(result.size() > 1){
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL,result);
-                new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT HOTEL JAI FINIS ");
         }
@@ -516,10 +516,16 @@ public class ZeroFragment extends Fragment{
             if(result.size() > 1){
                 //AsyncSaveImageAutoFrnt(result);
                 //Log.e("KEMAL","ENFANT RESTO PASSS DOWNLOAD ");
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO,result);
-                new AsyncSaveImageAuto().execute(result);
-               // new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT RESTO JAI FINIS ");
         }
@@ -534,6 +540,7 @@ public class ZeroFragment extends Fragment{
 
         }
     }
+
     void noDATAhelper(String urldisplay, String TABLED, String TableC, String D){
         TinyDB tinydb = new TinyDB(getContext());
         try {
@@ -549,6 +556,7 @@ public class ZeroFragment extends Fragment{
             myDB.execSQL(TableC);
         }
     }
+
     private class GetSITES extends AsyncTask<String, Void, ArrayList<String>> {
 
         @Override
@@ -653,9 +661,16 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES,result);
-                new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT SITES JAI FINIS ");
         }
@@ -786,9 +801,16 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI,result);
-                new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT SERLI JAI FINIS ");
         }
@@ -898,9 +920,16 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS,result);
-                new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT TRANS JAI FINIS ");
         }
@@ -1014,9 +1043,16 @@ public class ZeroFragment extends Fragment{
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             if(result.size() > 1){
-                TinyDB tinydb = new TinyDB(getContext());
-                tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV,result);
-                new AsyncSaveImageAuto().execute(result);
+                Context ctx = getContext();
+                if(ctx == null){
+                    TinyDB tinydb = new TinyDB(getActivity().getApplicationContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }else{
+                    TinyDB tinydb = new TinyDB(getContext());
+                    tinydb.putListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV,result);
+                    new AsyncSaveImageAuto().execute(result);
+                }
             }
             Log.e("KEMAL","ENFANT INNOV JAI FINIS ");
         }
@@ -1351,6 +1387,9 @@ public class ZeroFragment extends Fragment{
             }catch(OutOfMemoryError e){
                 e.printStackTrace();
                 return null;
+            }catch (NullPointerException e){
+                e.printStackTrace();
+                return null;
             }
         }
     }
@@ -1372,78 +1411,78 @@ public class ZeroFragment extends Fragment{
                               String Service,String Pointfort,String Pointfaible,String Prinpimage,String GaleryOne,String Galerytwo,
                               String Galeryfor,String Galeryfive,String Galerysix,String Mets,String Modified, String Description,String rating)
             {
-        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
-        /* Create a Table in the Database. */
-        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_HOTEL);
+                SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                /* Create a Table in the Database. */
+                myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_HOTEL);
 
-        ContentValues values = new ContentValues();
-       // values.put(databaseContract.dataEntry.hID, Id );
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hTITLEs,Title);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hADRSS,Adress);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_payement,Payement);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_siteweb ,Siteweb);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_longdescription ,Longdescription);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_uniqueid ,Uniqueid);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_rating , rating);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_service ,Service);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_pointfort ,Pointfort);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_pointfaible ,Pointfaible);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_prinpimage ,Prinpimage);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryOne ,GaleryOne);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galerytwo ,Galerytwo);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfor ,Galeryfor);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfive ,Galeryfive);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galerysix ,Galerysix);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_mets ,Mets);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hDESC,Description);
-        long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_HOTEL, null, values);
-                if(kid == -1){
-                    long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_HOTEL, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-                }else {
-                    if(Title!=null){
-                        createAddDatadb(Title,Adress,rating,"Hotel");
-                    }
-                }
-    }
+                ContentValues values = new ContentValues();
+               // values.put(databaseContract.dataEntry.hID, Id );
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hTITLEs,Title);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hADRSS,Adress);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_payement,Payement);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_siteweb ,Siteweb);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_longdescription ,Longdescription);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_uniqueid ,Uniqueid);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_rating , rating);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_service ,Service);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_pointfort ,Pointfort);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_pointfaible ,Pointfaible);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_prinpimage ,Prinpimage);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryOne ,GaleryOne);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galerytwo ,Galerytwo);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfor ,Galeryfor);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfive ,Galeryfive);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galerysix ,Galerysix);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_mets ,Mets);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hDESC,Description);
+                long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_HOTEL, null, values);
+                        if(kid == -1){
+                            long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_HOTEL, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+                        }else {
+                            if(Title!=null){
+                                createAddDatadb(Title,Adress,rating,"Hotel");
+                            }
+                        }
+            }
     void createAddDatadbRESTO(String Title, String Id,String Adress,String Payement,String Siteweb,String Longdescription,String Uniqueid,
                               String Service,String Pointfort,String Pointfaible,String Prinpimage,String GaleryOne,String Galerytwo,
                               String Galeryfor,String Galeryfive,String Galerysix,String Mets,String Modified, String Description,String rating)
-    {
-        SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
-        /* Create a Table in the Database. */
-        myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_RESTO);
+            {
+                SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+                /* Create a Table in the Database. */
+                myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_RESTO);
 
-        ContentValues values = new ContentValues();
-        //values.put(databaseContract.dataEntry.hID, Id );
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hTITLEs,Title);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hADRSS,Adress);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_horaire,Payement);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_siteweb ,Siteweb);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_longdescription ,Longdescription);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_uniqueid ,Uniqueid);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_rating , rating);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_service ,Service);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_pointfort ,Pointfort);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_pointfaible ,Pointfaible);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_prinpimage ,Prinpimage);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryOne ,GaleryOne);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galerytwo ,Galerytwo);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfor ,Galeryfor);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfive ,Galeryfive);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_galerysix ,Galerysix);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_mets ,Mets);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
-        values.put(databaseContract.dataEntry.COLUMN_NAME_hDESC,Description);
-        long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_RESTO, null, values);
-        if(kid == -1){
-            long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_RESTO, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-        }else {
-            if(Title!=null){
-                createAddDatadb(Title,Adress,rating,"Restaurant");
+                ContentValues values = new ContentValues();
+                //values.put(databaseContract.dataEntry.hID, Id );
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hTITLEs,Title);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hADRSS,Adress);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_horaire,Payement);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_siteweb ,Siteweb);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_longdescription ,Longdescription);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_uniqueid ,Uniqueid);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_rating , rating);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_service ,Service);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_pointfort ,Pointfort);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_pointfaible ,Pointfaible);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_prinpimage ,Prinpimage);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryOne ,GaleryOne);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galerytwo ,Galerytwo);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfor ,Galeryfor);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galeryfive ,Galeryfive);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_galerysix ,Galerysix);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_mets ,Mets);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_modified,Modified);
+                values.put(databaseContract.dataEntry.COLUMN_NAME_hDESC,Description);
+                long kid = myDB.insert(databaseContract.dataEntry.TABLE_NAME_RESTO, null, values);
+                if(kid == -1){
+                    long cid =  myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_RESTO, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+                }else {
+                    if(Title!=null){
+                        createAddDatadb(Title,Adress,rating,"Restaurant");
+                    }
+                }
             }
-        }
-    }
 
     void createAddDatadbSITES(String uniqueid, String Id, String name, String contact, String service, String mail,
                 String horaire, String price, String pointfort, String extras, String localisation,
@@ -1615,6 +1654,7 @@ public class ZeroFragment extends Fragment{
             }
         }
     }
+
     void createAddDatadbFAV(String fvuniqid, String byemail, String boolvar, String genre, String created_at, String Id)
     {
         Log.e("KEMAL db", "jai demarrer");
@@ -1665,6 +1705,7 @@ public class ZeroFragment extends Fragment{
         values.put(databaseContract.dataEntry.COLUMN_NAME_imgvar,imgvar);
         myDB.insertWithOnConflict(databaseContract.dataEntry.TABLE_NAME_PROFILS, null, values,SQLiteDatabase.CONFLICT_REPLACE);
     }
+
     private class DownloadTask extends AsyncTask<String,Void, Bitmap>{
         protected void onPreExecute(){}
         protected Bitmap doInBackground(String...urls){
@@ -1822,6 +1863,7 @@ public class ZeroFragment extends Fragment{
             }
         }else {return null;}
     }
+
     private void AddFavoriteInstant(String Title, String Adress,String Rat,String Desc,String Imurl,String Unic){
         SQLiteDatabase myDB = getActivity().openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
         myDB.execSQL(databaseContract.dataEntry.SQL_CREATE_ENTRIES_PROFILS);

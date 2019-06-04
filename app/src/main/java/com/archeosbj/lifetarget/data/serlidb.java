@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 
 import com.archeosbj.lifetarget.Model.Serli;
-import com.archeosbj.lifetarget.Model.Tour;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.List;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_NAME;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.DATABASE_VERSION;
 import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_SERLI;
-import static com.archeosbj.lifetarget.data.databaseContract.dataEntry.TABLE_NAME_SITES;
 
 public class serlidb extends SQLiteAssetHelper {
 
@@ -95,14 +93,15 @@ public class serlidb extends SQLiteAssetHelper {
     public List<Serli> getSitesByNames(String title){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        String[] sqlSelect={"id", "uniqueid", "name", "contact", "service", "mail", "horaire", "price",
-                "pointfort", "extras", "localisation", "more", "primpimage", "galeryOne",
-                "galerytwo","galerytree", "galeryfour", "galeryfive", "galerysix",
-                "galeryseven", "reserveone", "reservetwo", "plusStr", "modified"};
+        String[] sqlSelect={"id", "uniqueid", "name", "contact", "service", "description",
+                "horaire" , "price", "pointfort", "extras", "siteweb",
+                "payement", "primpimage", "galeryOne", "galerytwo", "galerytree",
+                "galeryfour", "galeryfive", "galerysix", "zonelivre",
+                "reserveone", "reservetwo", "maxlivre", "modified"};
         String tablename = TABLE_NAME_SERLI;
         qb.setTables(tablename);
 
-        Cursor cursor = qb.query(db,sqlSelect,"Title LIKE ?",new String[]{"%"+title+"%"},null,null,null);
+        Cursor cursor = qb.query(db,sqlSelect,"name LIKE ?",new String[]{"%"+title+"%"},null,null,null);
         List<Serli> result = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{

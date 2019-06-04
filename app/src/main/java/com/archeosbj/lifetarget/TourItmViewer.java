@@ -25,6 +25,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.archeosbj.lifetarget.data.databaseContract;
 import com.archeosbj.lifetarget.loginandregistration.app.AppController;
 import com.archeosbj.lifetarget.loginandregistration.helper.SQLiteHandler;
@@ -123,7 +124,10 @@ public class TourItmViewer extends AppCompatActivity {
 
         //basics
         Intent intent = getIntent();
-        String[] RestoItm = intent.getStringArrayExtra("ITEM");
+        final String Tcken = intent.getStringExtra("ITEM");
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        final String[] RestoItm =tinydb.getArryString(Tcken);
+        tinydb.remove(Tcken);
 
         Id =RestoItm[1] ;
         Name =RestoItm[2] ;

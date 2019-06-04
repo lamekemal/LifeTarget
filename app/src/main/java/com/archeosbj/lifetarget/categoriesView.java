@@ -5,14 +5,11 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -84,7 +81,6 @@ public class categoriesView extends AppCompatActivity {
 
         sendbycat = intent.getIntExtra(CATEGORIES_SENDER,2) ==1;
         indexcat = intent.getIntExtra(CATEGORIES_INDEX,9);
-        //Toast.makeText(getBaseContext(),String.valueOf(indexcat) ,Toast.LENGTH_SHORT).show();
         if ((intent.getIntExtra(CATEGORIES_SENDER,2) ==1)){
             //CATEGORIE VIEW
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -103,37 +99,33 @@ public class categoriesView extends AppCompatActivity {
             materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_zone);
             materialSearchBar.setPlaceHolderColor(getResources().getColor(R.color.white));
             setSupportActionBar(toolbar);
-            //Toast.makeText(getBaseContext(),"NON CATEGORISER",Toast.LENGTH_SHORT).show();
             makeuniversalsearch();
         }
 
-        //Intent intent = getIntent();
-        //materialSearchBar.setPlaceHolder("me");
         materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_zone);
         materialSearchBar.setHint(getString(R.string.search_hint));
         materialSearchBar.setCardViewElevation(10);
-        loadsuggestlist();
-        materialSearchBar.addTextChangeListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+        /*loadsuggestlist();
+       // materialSearchBar.addTextChangeListener(new TextWatcher() {
+         //   @Override
+           /// public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                List<String> suggest = new ArrayList<>();
+           //     List<String> suggest = new ArrayList<>();
                 for(String search:suggestList){
                     if(search.toLowerCase().contains(materialSearchBar.getText().toLowerCase()));
                     suggest.add(search);
                 }
-                materialSearchBar.setLastSuggestions(suggest);
+          //      materialSearchBar.setLastSuggestions(suggest);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+           // public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
         // SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -149,36 +141,6 @@ public class categoriesView extends AppCompatActivity {
                 android.R.color.holo_green_dark,
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark);
-
-        //listner pour la recherche en générale sur la page de categorie ou de recherche avancer //important (sameListnercode)
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
-            @Override
-            public void onSearchStateChanged(boolean enabled) {
-                if(!enabled){
-                    dbase = new database(getBaseContext());
-                    adapter = new SearchAdapter(getBaseContext(),dbase.getLife(),new SearchAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Life item) {
-                            //on item click
-                            recomandCLIK(item);
-                        }
-                    });
-                    recyclerView.setAdapter(adapter);
-                }
-
-            }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                startSearchs(text.toString());
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-
-            }
-        });
-
 
         ImageView imagelite = (ImageView) findViewById(R.id.indicator_search);
         imagelite.setOnClickListener(new View.OnClickListener(){
@@ -207,6 +169,7 @@ public class categoriesView extends AppCompatActivity {
                   new  loadData().execute(result);
                 }
                 actResto();
+                RestoSearch();
             }else if(indexcat ==2){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
@@ -214,6 +177,7 @@ public class categoriesView extends AppCompatActivity {
                     new  loadData().execute(result);
                 }
                 actHotel();
+                HotelSearch();
             }else if(indexcat ==3){
 
             }else if(indexcat ==4){
@@ -223,6 +187,7 @@ public class categoriesView extends AppCompatActivity {
                     new  loadData().execute(result);
                 }
                 actSerli();
+                SerliSearch();
             }else if(indexcat ==5){
                 TinyDB tinydb = new TinyDB(getApplicationContext());
                 ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
@@ -230,12 +195,11 @@ public class categoriesView extends AppCompatActivity {
                     new  loadData().execute(result);
                 }
                 actTrans();
+                TransSearch();
             }else if(indexcat ==6){
 
             }
         }
-
-
     }
 
     void refreshItems(){
@@ -243,35 +207,14 @@ public class categoriesView extends AppCompatActivity {
         // ...
         if (sendbycat == true){
             if(indexcat ==1){
-                TinyDB tinydb = new TinyDB(getApplicationContext());
-                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_RESTO);
-                Log.e("TEST KEMAL", "whislen boot = " + result.size());
-                if(result.size()>2){
-                    new  loadData().execute(result);
-                }
                 actResto();
             }else if(indexcat ==2){
-                TinyDB tinydb = new TinyDB(getApplicationContext());
-                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_HOTEL);
-                if(result.size()>2){
-                    new  loadData().execute(result);
-                }
                 actHotel();
             }else if(indexcat ==3){
 
             }else if(indexcat ==4){
-                TinyDB tinydb = new TinyDB(getApplicationContext());
-                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SERLI);
-                if(result.size()>2){
-                    new  loadData().execute(result);
-                }
                 actSerli();
             }else if(indexcat ==5){
-                TinyDB tinydb = new TinyDB(getApplicationContext());
-                ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_TRANS);
-                if(result.size()>2){
-                    new  loadData().execute(result);
-                }
                 actTrans();
             }else if(indexcat ==6){
 
@@ -287,159 +230,306 @@ public class categoriesView extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    void actResto(){
+    void RestoSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actResto(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+    }
+
+    void SerliSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actSerli(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+    }
+    void TransSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actTrans(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+    }
+    void HotelSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actHotel(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+    }
+    void actResto(String... SrgOpnVar){
         restodb obase = new restodb(this);
-        RestoAdapter xadapter = new RestoAdapter(this,obase.getResto(),new RestoAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(resto item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-                String[] RestoItm = new String[24];
-                RestoItm[0] = "1";
-                RestoItm[1] = String.valueOf(item.getId()) ;
-                RestoItm[2] = item.getTitle();
-                RestoItm[3] = item.getAdress();
-                RestoItm[4] = item.getHoraire();
-                RestoItm[5] = item.getSiteweb();
-                RestoItm[6] = item.getDescription();
-                RestoItm[7] = item.getLongdescription();
-                RestoItm[8] = item.getUniqueid();
-                RestoItm[9] = item.getRating();
-                RestoItm[10] = item.getService();
-                RestoItm[11] = item.getPointfort();
-                RestoItm[12] = item.getPointfaible();
-                RestoItm[13] = item.getPrinpimage();
-                RestoItm[14] = item.getMets();
-                RestoItm[15] = item.getModified();
-                RestoItm[16] = item.getGaleryOne();
-                RestoItm[17] =  item.getGalerytwo();
-                RestoItm[18] = item.getGaleryfor();
-                RestoItm[19] =  item.getGaleryfive();
-                RestoItm[20] =  item.getGalerysix();
-
-                intent.putExtra("ITEM",RestoItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                RestoAdapter xadapter = new RestoAdapter(this,obase.getRestoByTitle(SrgOpnVar[0] ),new RestoAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(resto item) {
+                        //on item click
+                        startRestoIntent(item);
+                    }
+                });
+                recyclerView.setAdapter(xadapter);
             }
-        });
-        Log.e("TEST DATA", "RESTO ROW" + obase.getResto().size());
-        recyclerView.setAdapter(xadapter);
-    }
-    void actHotel(){
+        }else{
+            RestoAdapter xadapter = new RestoAdapter(this,obase.getResto(),new RestoAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(resto item) {
+                    //on item click
+                    startRestoIntent(item);
+                }
+            });
+            recyclerView.setAdapter(xadapter);
+        }
+     }
+    void actHotel(String... SrgOpnVar){
         hoteldb lbase = new hoteldb(this);
-        HotelAdapter yadapter = new HotelAdapter(this,lbase.getHotel(),new HotelAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(hotel item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-                String[] HotelItm = new String[24];
-                HotelItm[0] = "2";
-                HotelItm[1] = String.valueOf(item.getId()) ;
-                HotelItm[2] = item.getTitle();
-                HotelItm[3] = item.getAdress();
-                HotelItm[4] = item.getPayement();
-                HotelItm[5] = item.getSiteweb();
-                HotelItm[6] = item.getDescription();
-                HotelItm[7] = item.getLongdescription();
-                HotelItm[8] = item.getUniqueid();
-                HotelItm[9] = item.getRating();
-                HotelItm[10] = item.getService();
-                HotelItm[11] = item.getPointfort();
-                HotelItm[12] = item.getPointfaible();
-                HotelItm[13] = item.getPrinpimage();
-                HotelItm[14] = item.getMets();
-                HotelItm[15] = item.getModified();
-                HotelItm[16] = item.getGaleryOne();
-                HotelItm[17] =  item.getGalerytwo();
-                HotelItm[18] = item.getGaleryfor();
-                HotelItm[19] =  item.getGaleryfive();
-                HotelItm[20] =  item.getGalerysix();
-
-                intent.putExtra("ITEM",HotelItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                HotelAdapter yadapter = new HotelAdapter(this,lbase.getHotelByTitle(SrgOpnVar[0]),new HotelAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(hotel item) {
+                        //on item click
+                        startHotelIntent( item);
+                    }
+                });
+                recyclerView.setAdapter(yadapter);
             }
-        });
-        recyclerView.setAdapter(yadapter);
+        }else{
+            HotelAdapter yadapter = new HotelAdapter(this,lbase.getHotel(),new HotelAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(hotel item) {
+                    //on item click
+                    startHotelIntent( item);
+                }
+            });
+            recyclerView.setAdapter(yadapter);
+        }
     }
-    void actSerli(){
+    void actSerli(String... SrgOpnVar){
         serlidb nbase = new serlidb(this);
-        SerliAdapter liadapter = new SerliAdapter(this,nbase.getSerli(),new SerliAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Serli item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), serliview.class);
-                String[] HotelItm = new String[28];
-                HotelItm[0] = "4";
-                HotelItm[1] = String.valueOf(item.getId()) ;
-                HotelItm[2] = item.getName();
-                HotelItm[3] = item.getContact();
-                HotelItm[4] = item.getUniqueid();
-                HotelItm[5] = item.getService();
-                HotelItm[6] = item.getPointfort();
-                HotelItm[7] = item.getPrice();
-                HotelItm[8] = item.getPrimpimage();
-                HotelItm[9] = item.getGaleryOne();
-                HotelItm[10] = item.getGalerytwo();
-                HotelItm[11] = item.getGalerytree();
-                HotelItm[12] = item.getGaleryfour();
-                HotelItm[13] = item.getGaleryfive();
-                HotelItm[14] = item.getGalerysix();
-                HotelItm[15] = item.getZonelivre();
-                HotelItm[16] = item.getMaxlivre();
-                HotelItm[17] =  item.getSiteweb();
-                HotelItm[18] = item.getHoraire();
-                HotelItm[19] =  item.getReserveone();
-                HotelItm[20] =  item.getReservetwo();
-                HotelItm[21] =  item.getExtras();
-                HotelItm[22] =  item.getDescription();
-                HotelItm[23] =  item.getPayement();
-                intent.putExtra("ITEM",HotelItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                SerliAdapter liadapter = new SerliAdapter(this,nbase.getSitesByNames(SrgOpnVar[0]),new SerliAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Serli item) {
+                        //on item click
+                        startSerliIntent(item);
+                    }
+                });
+                recyclerView.setAdapter(liadapter);
             }
-        });
-        recyclerView.setAdapter(liadapter);
+        }else{
+            SerliAdapter liadapter = new SerliAdapter(this,nbase.getSerli(),new SerliAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Serli item) {
+                    //on item click
+                    startSerliIntent(item);
+                }
+            });
+            recyclerView.setAdapter(liadapter);
+        }
     }
 
-    void actTrans(){
+    void actTrans(String... SrgOpnVar){
         transdb lbase = new transdb(this);
-        TransAdapter yadapter = new TransAdapter(this,lbase.getTrans(),new TransAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Trans item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), TransportActivity.class);
-                String[] HotelItm = new String[24];
-                HotelItm[0] = "5";
-                HotelItm[1] = String.valueOf(item.getId()) ;
-                HotelItm[2] = item.getName();
-                HotelItm[3] = item.getContact();
-                HotelItm[4] = item.getUniqueid();
-                HotelItm[5] = item.getService();
-                HotelItm[6] = item.getPointfort();
-                HotelItm[7] = item.getPrice();
-                HotelItm[8] = item.getMail();
-                HotelItm[9] = item.getPrimpimage();
-                HotelItm[10] = item.getGaleryOne();
-                HotelItm[11] = item.getGalerytwo();
-                HotelItm[12] = item.getGalerytree();
-                HotelItm[13] = item.getTransline();
-                HotelItm[14] = item.getLoanbus();
-                HotelItm[15] =  item.getMaxcap();
-                HotelItm[16] = item.getHoraire();
-                HotelItm[17] =  item.getReserveone();
-                HotelItm[19] =  item.getReservetwo();
-                HotelItm[20] =  item.getExtras();
-                HotelItm[21] =  item.getDescription();
-                HotelItm[22] =  item.getPayement();
-                intent.putExtra("ITEM",HotelItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                TransAdapter yadapter = new TransAdapter(this,lbase.getTransByNames(SrgOpnVar[0]),new TransAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Trans item) {
+                        //on item click
+                        startTransIntent(item);
+                    }
+                });
+                recyclerView.setAdapter(yadapter);
             }
-        });
-        recyclerView.setAdapter(yadapter);
+        }else{
+            TransAdapter yadapter = new TransAdapter(this,lbase.getTrans(),new TransAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Trans item) {
+                    //on item click
+                    startTransIntent(item);
+                }
+            });
+            recyclerView.setAdapter(yadapter);
+        }
+
     }
 
+    //Intent Start
+    void startTransIntent(Trans item){
+        Intent intent = new Intent(getBaseContext(), TransportActivity.class);
+        String[] HotelItm = new String[24];
+        HotelItm[0] = "5";
+        HotelItm[1] = String.valueOf(item.getId()) ;
+        HotelItm[2] = item.getName();
+        HotelItm[3] = item.getContact();
+        HotelItm[4] = item.getUniqueid();
+        HotelItm[5] = item.getService();
+        HotelItm[6] = item.getPointfort();
+        HotelItm[7] = item.getPrice();
+        HotelItm[8] = item.getMail();
+        HotelItm[9] = item.getPrimpimage();
+        HotelItm[10] = item.getGaleryOne();
+        HotelItm[11] = item.getGalerytwo();
+        HotelItm[12] = item.getGalerytree();
+        HotelItm[13] = item.getTransline();
+        HotelItm[14] = item.getLoanbus();
+        HotelItm[15] =  item.getMaxcap();
+        HotelItm[16] = item.getHoraire();
+        HotelItm[17] =  item.getReserveone();
+        HotelItm[19] =  item.getReservetwo();
+        HotelItm[20] =  item.getExtras();
+        HotelItm[21] =  item.getDescription();
+        HotelItm[22] =  item.getPayement();
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,HotelItm);
+        intent.putExtra("ITEM",Tcken);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+    }
+
+    void startSerliIntent(Serli item){
+        Intent intent = new Intent(getBaseContext(), serliview.class);
+        String[] HotelItm = new String[28];
+        HotelItm[0] = "4";
+        HotelItm[1] = String.valueOf(item.getId()) ;
+        HotelItm[2] = item.getName();
+        HotelItm[3] = item.getContact();
+        HotelItm[4] = item.getUniqueid();
+        HotelItm[5] = item.getService();
+        HotelItm[6] = item.getPointfort();
+        HotelItm[7] = item.getPrice();
+        HotelItm[8] = item.getPrimpimage();
+        HotelItm[9] = item.getGaleryOne();
+        HotelItm[10] = item.getGalerytwo();
+        HotelItm[11] = item.getGalerytree();
+        HotelItm[12] = item.getGaleryfour();
+        HotelItm[13] = item.getGaleryfive();
+        HotelItm[14] = item.getGalerysix();
+        HotelItm[15] = item.getZonelivre();
+        HotelItm[16] = item.getMaxlivre();
+        HotelItm[17] =  item.getSiteweb();
+        HotelItm[18] = item.getHoraire();
+        HotelItm[19] =  item.getReserveone();
+        HotelItm[20] =  item.getReservetwo();
+        HotelItm[21] =  item.getExtras();
+        HotelItm[22] =  item.getDescription();
+        HotelItm[23] =  item.getPayement();
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,HotelItm);
+        intent.putExtra("ITEM",Tcken);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+    }
+
+    void startHotelIntent(hotel item){
+        Intent intent = new Intent(getBaseContext(), hotelviwer.class);
+        String[] HotelItm = new String[24];
+        HotelItm[0] = "2";
+        HotelItm[1] = String.valueOf(item.getId()) ;
+        HotelItm[2] = item.getTitle();
+        HotelItm[3] = item.getAdress();
+        HotelItm[4] = item.getPayement();
+        HotelItm[5] = item.getSiteweb();
+        HotelItm[6] = item.getDescription();
+        HotelItm[7] = item.getLongdescription();
+        HotelItm[8] = item.getUniqueid();
+        HotelItm[9] = item.getRating();
+        HotelItm[10] = item.getService();
+        HotelItm[11] = item.getPointfort();
+        HotelItm[12] = item.getPointfaible();
+        HotelItm[13] = item.getPrinpimage();
+        HotelItm[14] = item.getMets();
+        HotelItm[15] = item.getModified();
+        HotelItm[16] = item.getGaleryOne();
+        HotelItm[17] =  item.getGalerytwo();
+        HotelItm[18] = item.getGaleryfor();
+        HotelItm[19] =  item.getGaleryfive();
+        HotelItm[20] =  item.getGalerysix();
+
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,HotelItm);
+        intent.putExtra("ITEM",Tcken);
+
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+    }
+
+    void startRestoIntent(resto item){
+        Intent intent = new Intent(getBaseContext(), hotelviwer.class);
+        String[] RestoItm = new String[24];
+        RestoItm[0] = "1";
+        RestoItm[1] = String.valueOf(item.getId()) ;
+        RestoItm[2] = item.getTitle();
+        RestoItm[3] = item.getAdress();
+        RestoItm[4] = item.getHoraire();
+        RestoItm[5] = item.getSiteweb();
+        RestoItm[6] = item.getDescription();
+        RestoItm[7] = item.getLongdescription();
+        RestoItm[8] = item.getUniqueid();
+        RestoItm[9] = item.getRating();
+        RestoItm[10] = item.getService();
+        RestoItm[11] = item.getPointfort();
+        RestoItm[12] = item.getPointfaible();
+        RestoItm[13] = item.getPrinpimage();
+        RestoItm[14] = item.getMets();
+        RestoItm[15] = item.getModified();
+        RestoItm[16] = item.getGaleryOne();
+        RestoItm[17] =  item.getGalerytwo();
+        RestoItm[18] = item.getGaleryfor();
+        RestoItm[19] =  item.getGaleryfive();
+        RestoItm[20] =  item.getGalerysix();
+
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,RestoItm);
+        intent.putExtra("ITEM",Tcken);
+
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+    }
 
     private void makeuniversalsearch() {
         //init adpter first  //condition de categorie ici //important (sameListnercode)
@@ -453,11 +543,16 @@ public class categoriesView extends AppCompatActivity {
     }
 
     private void showDialog() throws InterruptedException {
-        Thread.sleep(500);
-        Snackbar.make(findViewById(android.R.id.content), "Chargement des images", Snackbar.LENGTH_LONG)
-                .setAction("",null).show();
-       /*if (!pDialog.isShowing())
-            pDialog.show();*/
+        pDialog.setMessage("Chargement des images ...");
+        if (!pDialog.isShowing())
+            pDialog.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //your code here
+                pDialog.dismiss();
+            }
+        }, 5000);
     }
 
     private void hideDialog() {
@@ -500,7 +595,20 @@ public class categoriesView extends AppCompatActivity {
             @Override
             public void onPreExecute()
             {
-                pDialog.setMessage("Telechargement des images...");
+                pDialog.setMessage("Chargement des images ...");
+                if (!pDialog.isShowing())
+                    pDialog.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        //your code here
+                        if (pDialog.isShowing())
+                            pDialog.dismiss();
+
+                    }
+                }, 5000);
+
+                //pDialog.setMessage("Telechargement des images...");
                 try {
                     showDialog();
                 } catch (InterruptedException e) {
@@ -548,22 +656,13 @@ public class categoriesView extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Erreur " + item.getDescription() ,Toast.LENGTH_SHORT);
         }else if(item.getDescription() =="Sites Touristique"){
             Toast.makeText(getApplicationContext(),"Erreur " + item.getDescription() ,Toast.LENGTH_SHORT);
-            /*Intent intent = new Intent(getBaseContext(), sitesTviewer.class);
-            intent.putExtra(CATEGORIES_SENDER, item);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );*/
+
         }else if(item.getDescription() =="Restaurant"){
             Toast.makeText(getApplicationContext(),"Erreur " + item.getDescription() ,Toast.LENGTH_SHORT);
-            /*Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-            intent.putExtra(CATEGORIES_SENDER, item);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );*/
+
         }else if(item.getDescription() =="Hotel"){
             Toast.makeText(getApplicationContext(),"Erreur " + item.getDescription() ,Toast.LENGTH_SHORT);
-            /*Intent intent = new Intent(getBaseContext(), hotelviwer.class);
-            intent.putExtra(CATEGORIES_SENDER, item);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );*/
+
         }else if(item.getDescription() =="Transport"){
             Toast.makeText(getApplicationContext(),"Erreur " + item.getDescription() ,Toast.LENGTH_SHORT);
 
@@ -572,21 +671,21 @@ public class categoriesView extends AppCompatActivity {
 
         }
     }
-    private void startSearchs(String s) {
-        ////important (sameListnercode)
-        adapter = new SearchAdapter(this,dbase.getLifeByTitle(s),new SearchAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Life item) {
-                //on item click
-                recomandCLIK(item);
-            }
-        });
-        recyclerView.setAdapter(adapter);
-    }
 
-    private void loadsuggestlist() {
-        suggestList = dbase.getTitles();
-        materialSearchBar.setLastSuggestions(suggestList);
+    private void startSearchs(String s) {
+        ////important (s) =string for search
+        if(indexcat ==1){
+            actResto(s);
+        }else if(indexcat ==2){
+            actHotel(s);
+        }else if(indexcat ==3){
+
+        }else if(indexcat ==4){
+            actSerli(s);
+        }else if(indexcat ==5){
+            actTrans(s);
+        }else if(indexcat ==6){
+        }
     }
 
     @Override
@@ -594,12 +693,6 @@ public class categoriesView extends AppCompatActivity {
         super.finish();
         overridePendingTransitionExit();
     }
-
-   /* @Override
-    public void startActivity(Intent intent) {
-        super.startActivity(intent);
-        overridePendingTransitionEnter();
-    }*/
 
     /**
      * Overrides the pending Activity transition by performing the "Enter" animation.

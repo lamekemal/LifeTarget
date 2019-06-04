@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.archeosbj.lifetarget.Adpter.DestinationAdapter;
 import com.archeosbj.lifetarget.Model.Destination;
+import com.archeosbj.lifetarget.PreferenceTools.TinyDB;
 import com.bumptech.glide.Glide;
 import com.snatik.storage.Storage;
 
@@ -62,7 +63,11 @@ public class TransportActivity extends AppCompatActivity {
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.transportRecycler);
 
         Intent intent = getIntent();
-        final String[] tranItm = intent.getStringArrayExtra("ITEM");
+        final String Tcken = intent.getStringExtra("ITEM");
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        final String[] tranItm =tinydb.getArryString(Tcken);
+        tinydb.remove(Tcken);
+
         Id = tranItm[1];
         Name = tranItm[2];
         Contact = tranItm[3];

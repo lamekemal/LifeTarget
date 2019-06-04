@@ -73,7 +73,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="Hotel"
+                    android:text="Hotels"
                     android:textAlignment="center"
                     android:textSize="12dp" />
             </LinearLayout>
@@ -124,12 +124,13 @@
                     android:layout_height="72dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/picto_livraison" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="12dp"
+                    android:text="Services de livraisons "
                     android:textAlignment="center"
-                    android:text="Service de livraison "/>
+                    android:textSize="12dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginRight="12dp"
@@ -144,14 +145,15 @@
                     android:layout_height="72dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/trp_vc" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="-3dp"
                     android:layout_marginRight="-3dp"
-                    android:textSize="12dp"
+                    android:text="Transports"
                     android:textAlignment="center"
-                    android:text="Transport"/>
+                    android:textSize="12dp" />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginRight="12dp"
@@ -166,12 +168,13 @@
                     android:layout_height="72dp"
                     android:layout_margin="8dp"
                     android:src="@drawable/re_innov" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textSize="12dp"
+                    android:text="Innovations"
                     android:textAlignment="center"
-                    android:text="Innovation"/>
+                    android:textSize="12dp" />
             </LinearLayout>
 
         </LinearLayout>

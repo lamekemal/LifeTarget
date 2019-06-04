@@ -88,7 +88,7 @@ public class sitesdb extends SQLiteAssetHelper {
         return result;
     }
 
-    public List<Tour> getSitesByNames(String title){
+    public List<Tour> getSitesByNames(String name){
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
         String[] sqlSelect={"id", "uniqueid", "name", "contact", "service", "mail", "horaire", "price",
@@ -98,7 +98,7 @@ public class sitesdb extends SQLiteAssetHelper {
         String tablename = TABLE_NAME_SITES;
         qb.setTables(tablename);
 
-        Cursor cursor = qb.query(db,sqlSelect,"Title LIKE ?",new String[]{"%"+title+"%"},null,null,null);
+        Cursor cursor = qb.query(db,sqlSelect,"name LIKE ?",new String[]{"%"+name+"%"},null,null,null);
         List<Tour> result = new ArrayList<>();
         if(cursor.moveToFirst()){
             do{
@@ -119,7 +119,7 @@ public class sitesdb extends SQLiteAssetHelper {
                 Resto.setPrimpimage(cursor.getString(cursor.getColumnIndex("primpimage")));
                 Resto.setGaleryOne(cursor.getString(cursor.getColumnIndex("galeryOne")));
                 Resto.setGalerytree(cursor.getString(cursor.getColumnIndex("galerytree")));
-                Resto.setGaleryfour(cursor.getString(cursor.getColumnIndex("galeryfor")));
+                Resto.setGaleryfour(cursor.getString(cursor.getColumnIndex("galeryfour")));
                 Resto.setGalerytwo(cursor.getString(cursor.getColumnIndex("galerytwo")));
                 Resto.setGaleryfive(cursor.getString(cursor.getColumnIndex("galeryfive")));
                 Resto.setGalerysix(cursor.getString(cursor.getColumnIndex("galerysix")));

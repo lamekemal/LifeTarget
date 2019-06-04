@@ -7,7 +7,6 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -91,12 +90,13 @@ public class sitesTviewer extends AppCompatActivity {
                     materialSearchBar.setVisibility(View.GONE);
                     stateSearch = false;
                 }
-
             }
         });
+        materialSearchBar = (MaterialSearchBar) findViewById(R.id.search_zone);
+        materialSearchBar.setHint(getString(R.string.search_hint));
+        materialSearchBar.setCardViewElevation(10);
         stateSearch = false;
         setSupportActionBar(toolbar);
-
         TourList = new ArrayList<>();
         InnovList = new ArrayList<>();
 
@@ -113,7 +113,7 @@ public class sitesTviewer extends AppCompatActivity {
                 new loadData().execute(result);
             }
             actSites();
-
+            SitesSearch();
         }else if(indexcat ==6){
             //Innov zone
             TinyDB tinydb = new TinyDB(getApplicationContext());
@@ -122,6 +122,7 @@ public class sitesTviewer extends AppCompatActivity {
                 new loadData().execute(result);
             }
             actInnov();
+            InnovSearch();
         }
         // SwipeRefreshLayout
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -147,27 +148,58 @@ public class sitesTviewer extends AppCompatActivity {
     }
     void refreshItems() {
         // Load items
-        // ...
         if(indexcat ==3){
-            //SItes touristk
-            TinyDB tinydb = new TinyDB(getApplicationContext());
-            ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_SITES);
-            if(result.size()>2){
-                new loadData().execute(result);
-            }
             actSites();
-
         }else if(indexcat ==6){
-            //Innov zone
-            TinyDB tinydb = new TinyDB(getApplicationContext());
-            ArrayList<String> result = tinydb.getListString(databaseContract.dataEntry.DEFAULT_PREFS_SETTINGS_KEY_INNOV);
-            if(result.size()>2){
-                new loadData().execute(result);
-            }
             actInnov();
         }
         // Load complete
         onItemsLoadComplete();
+    }
+    void SitesSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actSites(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+    }
+    private void startSearchs(String s) {
+        ////important (s) =string for search
+        if(indexcat ==1){
+            //actResto(s);
+        }else if(indexcat ==2){
+            //actHotel(s);
+        }else if(indexcat ==3){
+            actSites(s);
+        }else if(indexcat ==4){
+            //actSerli(s);
+        }else if(indexcat ==5){
+            ///actTrans(s);
+        }else if(indexcat ==6){
+            actInnov(s);
+        }
+    }
+    void InnovSearch(){
+        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if(!enabled){ actInnov(); } }
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                startSearchs(text.toString());
+            }
+            @Override
+            public void onButtonClicked(int buttonCode) {
+            }
+        });
     }
 
     void onItemsLoadComplete() {
@@ -178,93 +210,144 @@ public class sitesTviewer extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    void actSites(){
+    void actSites(String... SrgOpnVar){
         sitesdb obase = new sitesdb(this);
-        TourAdapter xadapter = new TourAdapter(this,obase.getSites(),new TourAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Tour item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), TourItmViewer.class);
-                String[] RestoItm = new String[26];
-                RestoItm[0] = "";
-                RestoItm[1] = String.valueOf(item.getId()) ;
-                RestoItm[2] = item.getName();
-                RestoItm[3] = item.getContact();
-                RestoItm[4] = item.getHoraire();
-                RestoItm[5] = item.getMail();
-                RestoItm[6] = item.getUniqueid();
-                RestoItm[7] = item.getService();
-                RestoItm[8] = item.getPointfort();
-                RestoItm[9] = item.getPrice();
-                RestoItm[10] = item.getPrimpimage();
-                RestoItm[11] = item.getGaleryOne();
-                RestoItm[12] = item.getGalerytwo();
-                RestoItm[13] = item.getGalerytree();
-                RestoItm[14] = item.getGaleryfour();
-                RestoItm[15] = item.getGaleryfive();
-                RestoItm[16] = item.getGalerysix();
-                RestoItm[17] =  item.getGaleryseven();
-                RestoItm[18] = item.getLocalisation();
-                RestoItm[19] =  item.getMore();
-                RestoItm[20] =  item.getReserveone();
-                RestoItm[21] =  item.getReservetwo();
-                RestoItm[22] =  item.getExtras();
-                RestoItm[23] =  item.getPlusStr();
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                TourAdapter xadapter = new TourAdapter(this,obase.getSitesByNames(SrgOpnVar[0]),new TourAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Tour item) {
+                        //on item click
+                        startIntentSites(item);
+                    }
+                });
 
-                intent.putExtra("ITEM",RestoItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+                /*RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+                recyclerView.setItemAnimator(new DefaultItemAnimator());*/
+                recyclerView.setAdapter(xadapter);
             }
-        });
+        }else{
+            TourAdapter xadapter = new TourAdapter(this,obase.getSites(),new TourAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Tour item) {
+                    //on item click
+                    startIntentSites(item);
+                }
+            });
 
-
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(xadapter);
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(xadapter);
+        }
     }
-    void actInnov(){
+    void actInnov(String... SrgOpnVar){
         innovdb cbase = new innovdb(this);
-        InnovAdapter vadapter = new InnovAdapter(this,cbase.getInnov(),new InnovAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Innov item) {
-                //on item click
-                Intent intent = new Intent(getBaseContext(), Innovation.class);
-                String[] RestoItm = new String[26];
-                RestoItm[0] = "";
-                RestoItm[1] = String.valueOf(item.getId()) ;
-                RestoItm[2] = item.getName();
-                RestoItm[3] = item.getContact();
-                RestoItm[4] = item.getUniqueid();
-                RestoItm[5] = item.getService();
-                RestoItm[6] = item.getMail();
-                RestoItm[7] = item.getVideo();
-                RestoItm[8] = item.getPrimpimage();
-                RestoItm[9] = item.getGaleryOne();
-                RestoItm[10] = item.getGalerytwo();
-                RestoItm[11] = item.getGalerytree();
-                RestoItm[12] = item.getGaleryfour();
-                RestoItm[13] = item.getGaleryfive();
-                RestoItm[14] = item.getGalerysix();
-                RestoItm[15] =  item.getDescription();
-                RestoItm[16] = item.getBibliot();
-                RestoItm[17] =  item.getStectn();
-                RestoItm[18] =  item.getHistorq();
-                RestoItm[19] =  item.getReservetwo();
-                RestoItm[20] =  item.getInnovname();
-                intent.putExtra("ITEM",RestoItm);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
-            }
-        });
+        if (SrgOpnVar.length > 0) {
+            if (!(SrgOpnVar[0] == null)) {
+                //Fonction str
+                InnovAdapter vadapter = new InnovAdapter(this,cbase.getInnovByNames(SrgOpnVar[0]),new InnovAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Innov item) {
+                        //on item click
+                        startIntentInnov( item);
+                    }
+                });
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(vadapter);
+                /*RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+                recyclerView.setLayoutManager(mLayoutManager);
+                recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+                recyclerView.setItemAnimator(new DefaultItemAnimator());*/
+                recyclerView.setAdapter(vadapter);
+            }
+        }else{
+            InnovAdapter vadapter = new InnovAdapter(this,cbase.getInnov(),new InnovAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(Innov item) {
+                    //on item click
+                    startIntentInnov( item);
+                }
+            });
+
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setAdapter(vadapter);
+        }
+    }
+
+    void startIntentInnov(Innov item){
+        Intent intent = new Intent(getBaseContext(), Innovation.class);
+        String[] RestoItm = new String[26];
+        RestoItm[0] = "";
+        RestoItm[1] = String.valueOf(item.getId()) ;
+        RestoItm[2] = item.getName();
+        RestoItm[3] = item.getContact();
+        RestoItm[4] = item.getUniqueid();
+        RestoItm[5] = item.getService();
+        RestoItm[6] = item.getMail();
+        RestoItm[7] = item.getVideo();
+        RestoItm[8] = item.getPrimpimage();
+        RestoItm[9] = item.getGaleryOne();
+        RestoItm[10] = item.getGalerytwo();
+        RestoItm[11] = item.getGalerytree();
+        RestoItm[12] = item.getGaleryfour();
+        RestoItm[13] = item.getGaleryfive();
+        RestoItm[14] = item.getGalerysix();
+        RestoItm[15] =  item.getDescription();
+        RestoItm[16] = item.getBibliot();
+        RestoItm[17] =  item.getStectn();
+        RestoItm[18] =  item.getHistorq();
+        RestoItm[19] =  item.getReservetwo();
+        RestoItm[20] =  item.getInnovname();
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,RestoItm);
+        intent.putExtra("ITEM",Tcken);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
+
+    }
+
+    void startIntentSites(Tour item){
+        Intent intent = new Intent(getBaseContext(), TourItmViewer.class);
+        String[] RestoItm = new String[26];
+        RestoItm[0] = "";
+        RestoItm[1] = String.valueOf(item.getId()) ;
+        RestoItm[2] = item.getName();
+        RestoItm[3] = item.getContact();
+        RestoItm[4] = item.getHoraire();
+        RestoItm[5] = item.getMail();
+        RestoItm[6] = item.getUniqueid();
+        RestoItm[7] = item.getService();
+        RestoItm[8] = item.getPointfort();
+        RestoItm[9] = item.getPrice();
+        RestoItm[10] = item.getPrimpimage();
+        RestoItm[11] = item.getGaleryOne();
+        RestoItm[12] = item.getGalerytwo();
+        RestoItm[13] = item.getGalerytree();
+        RestoItm[14] = item.getGaleryfour();
+        RestoItm[15] = item.getGaleryfive();
+        RestoItm[16] = item.getGalerysix();
+        RestoItm[17] =  item.getGaleryseven();
+        RestoItm[18] = item.getLocalisation();
+        RestoItm[19] =  item.getMore();
+        RestoItm[20] =  item.getReserveone();
+        RestoItm[21] =  item.getReservetwo();
+        RestoItm[22] =  item.getExtras();
+        RestoItm[23] =  item.getPlusStr();
+
+        final String Tcken = randomService.getStringToken(5);
+        TinyDB tinydb = new TinyDB(getApplicationContext());
+        tinydb.putArryString(Tcken ,RestoItm);
+        intent.putExtra("ITEM",Tcken);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_from_left,R.anim.slide_to_right );
     }
 
     private class loadData extends AsyncTask<ArrayList<String>,Integer,Boolean> {
@@ -272,6 +355,7 @@ public class sitesTviewer extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(ArrayList<String>... params) {
                // Thread.sleep(500);
+
                 int whis =0;
                 int whiset = 0;
                 int whislen = params[0].size();
@@ -302,15 +386,25 @@ public class sitesTviewer extends AppCompatActivity {
         @Override
         public void onPreExecute()
         {
-            pDialog.setMessage("Telechargement ...");
             try {
+
+                pDialog.setMessage("Chargement des images ...");
+                if (!pDialog.isShowing())
+                    pDialog.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        //your code here
+                        pDialog.dismiss();
+                    }
+                }, 5000);
+
                 showDialog();
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //pBar.setVisibility(View.VISIBLE);
         }
-
 
         @Override
         public void onPostExecute(Boolean result)
@@ -385,10 +479,10 @@ public class sitesTviewer extends AppCompatActivity {
     }
 
     private void showDialog() throws InterruptedException {
-        Thread.sleep(500);
+       /* Thread.sleep(500);
         Snackbar.make(findViewById(android.R.id.content), "Chargement des images", Snackbar.LENGTH_LONG)
                 .setAction("",null).show();
-       /*if (!pDialog.isShowing())
+       if (!pDialog.isShowing())
             pDialog.show();*/
     }
 

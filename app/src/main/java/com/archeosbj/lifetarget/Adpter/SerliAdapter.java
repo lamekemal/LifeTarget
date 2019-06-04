@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.archeosbj.lifetarget.Model.Serli;
 import com.archeosbj.lifetarget.R;
+import com.bumptech.glide.Glide;
 import com.snatik.storage.Storage;
 
 import java.io.File;
@@ -65,9 +66,15 @@ public class SerliAdapter extends RecyclerView.Adapter<SerliViewHolder> {
         String newDir = path + File.separator + DATA_DIRECTORI;
         String newDiri = newDir + File.separator + "images";
         String fileph = newDiri + File.separator + Hotel.get(position).getPrimpimage();
+
         //hotelviwer.imageManupulate.setBitmapImageFormMomory(fileph,holder.thumbnail);
-        Bitmap bm = decodeSampledBitmapFromResource(fileph,95,95);
-        holder.thumbnail.setImageBitmap(bm);
+        //Bitmap bm = decodeSampledBitmapFromResource(fileph,95,95);
+        //holder.thumbnail.setImageBitmap(bm);
+        Glide.with(context)
+                .load(storage
+                .getFile(fileph))
+                .into(holder.thumbnail);
+
         ///////////////////////////////////////////////////////////////////////////////////
         holder.thumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
         //////////////////////////////////////////////////////////////////////////////////
